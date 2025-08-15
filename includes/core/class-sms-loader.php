@@ -59,6 +59,7 @@ class SMS_Loader {
         $this->define_public_hooks();
         $this->define_custom_post_types();
         $this->define_taxonomies();
+        $this->define_student_management();
         $this->define_api_hooks();
     }
 
@@ -77,6 +78,10 @@ class SMS_Loader {
         
         // Admin functionality
         require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-admin.php';
+        require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-student-admission-form.php';
+        require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-attendance-manager.php';
+        require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-attendance-reports.php';
+        require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-attendance-notifications.php';
         
         // Public functionality
         require_once SMS_PLUGIN_DIR . 'includes/public/class-sms-public.php';
@@ -89,6 +94,16 @@ class SMS_Loader {
         
         // User roles
         require_once SMS_PLUGIN_DIR . 'includes/user-roles/class-sms-user-roles.php';
+        require_once SMS_PLUGIN_DIR . 'includes/user-roles/class-sms-role-manager.php';
+        require_once SMS_PLUGIN_DIR . 'includes/user-roles/class-sms-capability-checker.php';
+        require_once SMS_PLUGIN_DIR . 'includes/user-roles/class-sms-role-automation.php';
+        require_once SMS_PLUGIN_DIR . 'includes/user-roles/class-sms-parent-student-manager.php';
+        require_once SMS_PLUGIN_DIR . 'includes/user-roles/class-sms-parent-access-control.php';
+        require_once SMS_PLUGIN_DIR . 'includes/user-roles/class-sms-bulk-parent-operations.php';
+        
+        // Student management functionality
+        require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-student-manager.php';
+        require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-student-enrollment.php';
         
         // API endpoints
         require_once SMS_PLUGIN_DIR . 'includes/api/class-sms-api.php';
@@ -146,6 +161,26 @@ class SMS_Loader {
         $this->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
         $this->add_action('admin_menu', $plugin_admin, 'add_admin_menu');
         $this->add_action('admin_init', $plugin_admin, 'admin_init');
+        
+        // Initialize student admission form
+        if (class_exists('SMS_Student_Admission_Form')) {
+            new SMS_Student_Admission_Form();
+        }
+        
+        // Initialize attendance manager
+        if (class_exists('SMS_Attendance_Manager')) {
+            new SMS_Attendance_Manager();
+        }
+        
+        // Initialize attendance reports
+        if (class_exists('SMS_Attendance_Reports')) {
+            new SMS_Attendance_Reports();
+        }
+        
+        // Initialize attendance notifications
+        if (class_exists('SMS_Attendance_Notifications')) {
+            new SMS_Attendance_Notifications();
+        }
     }
 
     /**
@@ -170,6 +205,21 @@ class SMS_Loader {
      */
     private function define_taxonomies() {
         $this->add_action('init', $this, 'register_custom_taxonomies');
+    }
+
+    /**
+     * Initialize student management functionality.
+     */
+    private function define_student_management() {
+        // Initialize student manager
+        if (class_exists('SMS_Student_Manager')) {
+            new SMS_Student_Manager();
+        }
+        
+        // Initialize student enrollment manager
+        if (class_exists('SMS_Student_Enrollment')) {
+            new SMS_Student_Enrollment();
+        }
     }
 
     /**

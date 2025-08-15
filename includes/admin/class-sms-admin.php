@@ -74,7 +74,7 @@ class SMS_Admin extends SMS_Base {
         add_menu_page(
             __('School Management', 'school-management-system'),
             __('School Management', 'school-management-system'),
-            'manage_students',
+            'edit_posts',
             'school-management',
             array($this, 'display_dashboard'),
             'dashicons-graduation-cap',
@@ -86,7 +86,7 @@ class SMS_Admin extends SMS_Base {
             'school-management',
             __('Dashboard', 'school-management-system'),
             __('Dashboard', 'school-management-system'),
-            'manage_students',
+            'edit_posts',
             'school-management',
             array($this, 'display_dashboard')
         );
@@ -96,7 +96,7 @@ class SMS_Admin extends SMS_Base {
             'school-management',
             __('Students', 'school-management-system'),
             __('Students', 'school-management-system'),
-            'manage_students',
+            'edit_posts',
             'sms-students',
             array($this, 'display_students_page')
         );
@@ -106,7 +106,7 @@ class SMS_Admin extends SMS_Base {
             'school-management',
             __('Classes', 'school-management-system'),
             __('Classes', 'school-management-system'),
-            'manage_classes',
+            'edit_posts',
             'sms-classes',
             array($this, 'display_classes_page')
         );
@@ -116,7 +116,7 @@ class SMS_Admin extends SMS_Base {
             'school-management',
             __('Fees & Payments', 'school-management-system'),
             __('Fees & Payments', 'school-management-system'),
-            'manage_fees',
+            'edit_posts',
             'sms-fees',
             array($this, 'display_fees_page')
         );
@@ -126,7 +126,7 @@ class SMS_Admin extends SMS_Base {
             'school-management',
             __('Reports', 'school-management-system'),
             __('Reports', 'school-management-system'),
-            'view_all_reports',
+            'edit_posts',
             'sms-reports',
             array($this, 'display_reports_page')
         );
@@ -136,7 +136,7 @@ class SMS_Admin extends SMS_Base {
             'school-management',
             __('Settings', 'school-management-system'),
             __('Settings', 'school-management-system'),
-            'manage_system_settings',
+            'manage_options',
             'sms-settings',
             array($this, 'display_settings_page')
         );

@@ -31,7 +31,7 @@ class SMS_Classes_CPT extends SMS_Base {
         parent::__construct();
         
         // Register the custom post type
-        add_action('sms_register_post_types', [$this, 'register_post_type']);
+        add_action('init', [$this, 'register_post_type']);
         
         // Add ACF field groups
         add_action('acf/init', [$this, 'register_acf_fields']);
@@ -97,7 +97,7 @@ class SMS_Classes_CPT extends SMS_Base {
             'hierarchical'          => false,
             'public'                => false,
             'show_ui'               => true,
-            'show_in_menu'          => 'sms-dashboard',
+            'show_in_menu'          => 'school-management',
             'menu_position'         => 6,
             'menu_icon'             => 'dashicons-welcome-learn-more',
             'show_in_admin_bar'     => true,
@@ -108,14 +108,14 @@ class SMS_Classes_CPT extends SMS_Base {
             'publicly_queryable'    => false,
             'capability_type'       => 'post',
             'capabilities'          => [
-                'edit_post'          => 'manage_classes',
-                'read_post'          => 'manage_classes',
-                'delete_post'        => 'manage_classes',
-                'edit_posts'         => 'manage_classes',
-                'edit_others_posts'  => 'manage_classes',
-                'delete_posts'       => 'manage_classes',
-                'publish_posts'      => 'manage_classes',
-                'read_private_posts' => 'manage_classes',
+                'edit_post'          => 'edit_posts',
+                'read_post'          => 'edit_posts',
+                'delete_post'        => 'delete_posts',
+                'edit_posts'         => 'edit_posts',
+                'edit_others_posts'  => 'edit_others_posts',
+                'delete_posts'       => 'delete_posts',
+                'publish_posts'      => 'publish_posts',
+                'read_private_posts' => 'read_private_posts',
             ],
             'show_in_rest'          => true,
             'rest_base'             => 'classes',

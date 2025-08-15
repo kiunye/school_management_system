@@ -31,7 +31,7 @@ class SMS_Students_CPT extends SMS_Base {
         parent::__construct();
         
         // Register the custom post type
-        add_action('sms_register_post_types', [$this, 'register_post_type']);
+        add_action('init', [$this, 'register_post_type']);
         
         // Add ACF field groups
         add_action('acf/init', [$this, 'register_acf_fields']);
@@ -96,7 +96,7 @@ class SMS_Students_CPT extends SMS_Base {
             'hierarchical'          => false,
             'public'                => false,
             'show_ui'               => true,
-            'show_in_menu'          => 'sms-dashboard',
+            'show_in_menu'          => 'school-management',
             'menu_position'         => 5,
             'menu_icon'             => 'dashicons-groups',
             'show_in_admin_bar'     => true,
@@ -107,14 +107,14 @@ class SMS_Students_CPT extends SMS_Base {
             'publicly_queryable'    => false,
             'capability_type'       => 'post',
             'capabilities'          => [
-                'edit_post'          => 'manage_students',
-                'read_post'          => 'manage_students',
-                'delete_post'        => 'manage_students',
-                'edit_posts'         => 'manage_students',
-                'edit_others_posts'  => 'manage_students',
-                'delete_posts'       => 'manage_students',
-                'publish_posts'      => 'manage_students',
-                'read_private_posts' => 'manage_students',
+                'edit_post'          => 'edit_posts',
+                'read_post'          => 'edit_posts',
+                'delete_post'        => 'delete_posts',
+                'edit_posts'         => 'edit_posts',
+                'edit_others_posts'  => 'edit_others_posts',
+                'delete_posts'       => 'delete_posts',
+                'publish_posts'      => 'publish_posts',
+                'read_private_posts' => 'read_private_posts',
             ],
             'show_in_rest'          => true,
             'rest_base'             => 'students',
@@ -685,6 +685,9 @@ class SMS_Students_CPT extends SMS_Base {
         
         // Update the field
         update_field('admission_number', $admission_number, $post_id);
+        
+        // Trigger parent relationship update
+        do_action('sms_student_admission_number_generated', $post_id, $admission_number);
     }
 
     /**

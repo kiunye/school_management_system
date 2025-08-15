@@ -17,11 +17,25 @@ if (!defined('WPINC')) {
 class SMS_User_Roles extends SMS_Base {
 
     /**
+     * Available SMS roles.
+     */
+    const SMS_ROLES = [
+        'school_administrator' => 'School Administrator',
+        'teacher' => 'Teacher', 
+        'parent' => 'Parent',
+        'student' => 'Student'
+    ];
+
+    /**
      * Initialize user roles.
      */
     public function __construct() {
         parent::__construct();
-        add_action('init', array($this, 'maybe_update_roles'));
+        add_action('init', [$this, 'maybe_update_roles']);
+        add_action('user_register', [$this, 'assign_default_role'], 10, 1);
+        add_action('wp_login', [$this, 'check_user_role_access'], 10, 2);
+        add_filter('editable_roles', [$this, 'filter_editable_roles']);
+        add_action('admin_init', [$this, 'restrict_admin_access']);
     }
 
     /**
@@ -252,7 +266,7 @@ class SMS_User_Roles extends SMS_Base {
             return $this->handle_error('invalid_user', 'Invalid user ID');
         }
         
-        $valid_roles = array('school_administrator', 'teacher', 'parent', 'student');
+        $valid_roles = array_keys(self::SMS_ROLES);
         if (!in_array($role, $valid_roles)) {
             return $this->handle_error('invalid_role', 'Invalid role specified');
         }
@@ -265,12 +279,292 @@ class SMS_User_Roles extends SMS_Base {
         // Add new role
         $user->add_role($role);
         
-        $this->log("User {$user_id} assigned to role {$role}", 'info', array(
+        // Set additional user meta for role-specific data
+        $this->set_role_specific_meta($user_id, $role);
+        
+        $this->log("User {$user_id} assigned to role {$role}", 'info', [
             'user_id' => $user_id,
             'role' => $role,
             'assigned_by' => get_current_user_id()
-        ));
+        ]);
         
-        return $this->handle_success(array('user_id' => $user_id, 'role' => $role), 'Role assigned successfully');
+        // Trigger role assignment action
+        do_action('sms_user_role_assigned', $user_id, $role);
+        
+        return $this->handle_success(['user_id' => $user_id, 'role' => $role], 'Role assigned successfully');
+    }
+
+    /**
+     * Assign default role to new users.
+     */
+    public function assign_default_role($user_id) {
+        $user = get_userdata($user_id);
+        if (!$user) {
+            return;
+        }
+
+        // Check if user already has an SMS role
+        if ($this->user_has_sms_role($user_id)) {
+            return;
+        }
+
+        // Default role assignment logic
+        $default_role = apply_filters('sms_default_user_role', 'parent', $user);
+        
+        if (in_array($default_role, array_keys(self::SMS_ROLES))) {
+            $this->assign_user_role($user_id, $default_role);
+        }
+    }
+
+    /**
+     * Check user role access on login.
+     */
+    public function check_user_role_access($user_login, $user) {
+        if (!$this->user_has_sms_role($user->ID)) {
+            return;
+        }
+
+        // Update last login time
+        update_user_meta($user->ID, 'sms_last_login', current_time('mysql'));
+        
+        // Log user login
+        $this->log("User {$user->ID} ({$user_login}) logged in", 'info', [
+            'user_id' => $user->ID,
+            'user_login' => $user_login,
+            'login_time' => current_time('mysql')
+        ]);
+    }
+
+    /**
+     * Filter editable roles to show only SMS roles to SMS users.
+     */
+    public function filter_editable_roles($roles) {
+        $current_user = wp_get_current_user();
+        
+        if ($this->user_has_sms_role($current_user->ID)) {
+            // School administrators can manage all SMS roles
+            if (in_array('school_administrator', $current_user->roles)) {
+                $sms_roles = [];
+                foreach (self::SMS_ROLES as $role_key => $role_name) {
+                    if (isset($roles[$role_key])) {
+                        $sms_roles[$role_key] = $roles[$role_key];
+                    }
+                }
+                return $sms_roles;
+            }
+            
+            // Teachers can only manage parent and student roles
+            if (in_array('teacher', $current_user->roles)) {
+                $allowed_roles = ['parent', 'student'];
+                $filtered_roles = [];
+                foreach ($allowed_roles as $role_key) {
+                    if (isset($roles[$role_key])) {
+                        $filtered_roles[$role_key] = $roles[$role_key];
+                    }
+                }
+                return $filtered_roles;
+            }
+        }
+        
+        return $roles;
+    }
+
+    /**
+     * Restrict admin access based on user roles.
+     */
+    public function restrict_admin_access() {
+        $current_user = wp_get_current_user();
+        
+        if (!$this->user_has_sms_role($current_user->ID)) {
+            return;
+        }
+
+        // Parents and students should not access admin area except for profile
+        if (in_array('parent', $current_user->roles) || in_array('student', $current_user->roles)) {
+            $allowed_pages = ['profile.php', 'user-edit.php', 'admin-ajax.php'];
+            $current_page = basename($_SERVER['PHP_SELF']);
+            
+            if (!in_array($current_page, $allowed_pages) && !wp_doing_ajax()) {
+                wp_redirect(home_url());
+                exit;
+            }
+        }
+    }
+
+    /**
+     * Set role-specific user meta.
+     */
+    private function set_role_specific_meta($user_id, $role) {
+        // Set role assignment timestamp
+        update_user_meta($user_id, 'sms_role_assigned_date', current_time('mysql'));
+        update_user_meta($user_id, 'sms_current_role', $role);
+        
+        // Role-specific meta
+        switch ($role) {
+            case 'teacher':
+                update_user_meta($user_id, 'sms_teacher_id', $this->generate_teacher_id());
+                update_user_meta($user_id, 'sms_assigned_classes', []);
+                break;
+                
+            case 'parent':
+                update_user_meta($user_id, 'sms_children', []);
+                update_user_meta($user_id, 'sms_notification_preferences', [
+                    'sms' => true,
+                    'email' => true,
+                    'attendance_alerts' => true,
+                    'fee_reminders' => true
+                ]);
+                break;
+                
+            case 'student':
+                update_user_meta($user_id, 'sms_student_status', 'pending');
+                break;
+        }
+    }
+
+    /**
+     * Generate unique teacher ID.
+     */
+    private function generate_teacher_id() {
+        $year = date('Y');
+        $prefix = 'TCH' . $year;
+        
+        // Get the highest existing teacher ID for this year
+        $users = get_users([
+            'role' => 'teacher',
+            'meta_key' => 'sms_teacher_id',
+            'meta_compare' => 'LIKE',
+            'meta_value' => $prefix
+        ]);
+        
+        $highest_number = 0;
+        foreach ($users as $user) {
+            $teacher_id = get_user_meta($user->ID, 'sms_teacher_id', true);
+            if ($teacher_id) {
+                $number = intval(substr($teacher_id, -4));
+                if ($number > $highest_number) {
+                    $highest_number = $number;
+                }
+            }
+        }
+        
+        return $prefix . str_pad($highest_number + 1, 4, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * Get user's SMS role.
+     */
+    public function get_user_sms_role($user_id = null) {
+        if (!$user_id) {
+            $user_id = get_current_user_id();
+        }
+        
+        $user = get_userdata($user_id);
+        if (!$user) {
+            return false;
+        }
+        
+        foreach (array_keys(self::SMS_ROLES) as $role) {
+            if (in_array($role, $user->roles)) {
+                return $role;
+            }
+        }
+        
+        return false;
+    }
+
+    /**
+     * Check if user can manage specific capability.
+     */
+    public function user_can_manage($capability, $user_id = null) {
+        if (!$user_id) {
+            $user_id = get_current_user_id();
+        }
+        
+        return user_can($user_id, $capability);
+    }
+
+    /**
+     * Get users with specific SMS role and additional filters.
+     */
+    public function get_sms_users($role, $args = []) {
+        $default_args = [
+            'role' => $role,
+            'orderby' => 'display_name',
+            'order' => 'ASC',
+            'fields' => 'all'
+        ];
+        
+        $args = wp_parse_args($args, $default_args);
+        
+        // Add SMS-specific meta query if needed
+        if (isset($args['sms_status'])) {
+            $args['meta_query'] = [
+                [
+                    'key' => 'sms_student_status',
+                    'value' => $args['sms_status'],
+                    'compare' => '='
+                ]
+            ];
+            unset($args['sms_status']);
+        }
+        
+        return get_users($args);
+    }
+
+    /**
+     * Bulk assign roles to users.
+     */
+    public function bulk_assign_roles($user_ids, $role) {
+        if (!is_array($user_ids)) {
+            return $this->handle_error('invalid_input', 'User IDs must be an array');
+        }
+        
+        if (!in_array($role, array_keys(self::SMS_ROLES))) {
+            return $this->handle_error('invalid_role', 'Invalid role specified');
+        }
+        
+        $success_count = 0;
+        $errors = [];
+        
+        foreach ($user_ids as $user_id) {
+            $result = $this->assign_user_role($user_id, $role);
+            if (is_wp_error($result)) {
+                $errors[] = "User {$user_id}: " . $result->get_error_message();
+            } else {
+                $success_count++;
+            }
+        }
+        
+        $this->log("Bulk role assignment: {$success_count} users assigned to {$role}", 'info', [
+            'role' => $role,
+            'success_count' => $success_count,
+            'error_count' => count($errors),
+            'assigned_by' => get_current_user_id()
+        ]);
+        
+        return $this->handle_success([
+            'success_count' => $success_count,
+            'errors' => $errors
+        ], "Successfully assigned {$success_count} users to {$role} role");
+    }
+
+    /**
+     * Get role statistics.
+     */
+    public function get_role_statistics() {
+        $stats = [];
+        
+        foreach (self::SMS_ROLES as $role_key => $role_name) {
+            $count = count(get_users(['role' => $role_key]));
+            $stats[$role_key] = [
+                'name' => $role_name,
+                'count' => $count
+            ];
+        }
+        
+        return $stats;
     }
 }
+// Initialize the class
+new SMS_User_Roles();
