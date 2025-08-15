@@ -1,0 +1,99 @@
+# School Management System Translation Template
+# Copyright (C) 2024 School Management System
+# This file is distributed under the same license as the School Management System package.
+msgid ""
+msgstr ""
+"Project-Id-Version: School Management System 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: admin/partials/dashboard.php
+msgid "Students"
+msgstr ""
+
+#: admin/partials/dashboard.php
+msgid "Total active students"
+msgstr ""
+
+#: admin/partials/dashboard.php
+msgid "Manage Students"
+msgstr ""
+
+#: admin/partials/dashboard.php
+msgid "Classes"
+msgstr ""
+
+#: admin/partials/dashboard.php
+msgid "Active classes"
+msgstr ""
+
+#: admin/partials/dashboard.php
+msgid "Manage Classes"
+msgstr ""
+
+#: admin/partials/dashboard.php
+msgid "Fees & Payments"
+msgstr ""
+
+#: admin/partials/dashboard.php
+msgid "Pending payments"
+msgstr ""
+
+#: admin/partials/dashboard.php
+msgid "Manage Fees"
+msgstr ""
+
+#: admin/partials/dashboard.php
+msgid "System Status"
+msgstr ""
+
+#: admin/partials/dashboard.php
+msgid "Active"
+msgstr ""
+
+#: admin/partials/dashboard.php
+msgid "All systems operational"
+msgstr ""
+
+#: admin/partials/dashboard.php
+msgid "System Settings"
+msgstr ""
+
+#: admin/partials/dashboard.php
+msgid "Quick Actions"
+msgstr ""
+
+#: admin/partials/dashboard.php
+msgid "Add New Student"
+msgstr ""
+
+#: admin/partials/dashboard.php
+msgid "Create Class"
+msgstr ""
+
+#: admin/partials/dashboard.php
+msgid "Send Notice"
+msgstr ""
+
+#: admin/partials/dashboard.php
+msgid "View Reports"
+msgstr ""
+
+#: admin/partials/dashboard.php
+msgid "Recent Activity"
+msgstr ""
+
+#: admin/partials/dashboard.php
+msgid "Loading recent activity..."
+msgstr ""
+
+#: admin/partials/dashboard.php
+msgid "No recent activity found."
+msgstr ""

@@ -1,0 +1,1179 @@
+/**
+ * Admin styles for School Management System
+ */
+
+/* Main admin container */
+.sms-admin-container {
+    max-width: 1200px;
+    margin: 20px 0;
+}
+
+/* Dashboard widgets */
+.sms-dashboard-widgets {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.sms-widget {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
+
+.sms-widget h3 {
+    margin-top: 0;
+    color: #23282d;
+    font-size: 18px;
+}
+
+.sms-widget-stat {
+    font-size: 32px;
+    font-weight: bold;
+    color: #0073aa;
+    margin: 10px 0;
+}
+
+/* Form styles */
+.sms-form-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.sms-form-table th,
+.sms-form-table td {
+    padding: 15px 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.sms-form-table th {
+    background-color: #f9f9f9;
+    font-weight: 600;
+    width: 200px;
+}
+
+.sms-form-table input[type="text"],
+.sms-form-table input[type="email"],
+.sms-form-table input[type="tel"],
+.sms-form-table input[type="date"],
+.sms-form-table input[type="number"],
+.sms-form-table select,
+.sms-form-table textarea {
+    width: 100%;
+    max-width: 400px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.sms-form-table textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+/* Button styles */
+.sms-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #0073aa;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.sms-btn:hover {
+    background-color: #005a87;
+    color: #fff;
+}
+
+.sms-btn-secondary {
+    background-color: #6c757d;
+}
+
+.sms-btn-secondary:hover {
+    background-color: #545b62;
+}
+
+.sms-btn-danger {
+    background-color: #dc3545;
+}
+
+.sms-btn-danger:hover {
+    background-color: #c82333;
+}
+
+.sms-btn-success {
+    background-color: #28a745;
+}
+
+.sms-btn-success:hover {
+    background-color: #218838;
+}
+
+/* Data tables */
+.sms-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.sms-data-table th,
+.sms-data-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.sms-data-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #495057;
+}
+
+.sms-data-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.sms-data-table .actions {
+    white-space: nowrap;
+}
+
+.sms-data-table .actions a {
+    margin-right: 10px;
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+}
+
+.sms-data-table .actions .edit {
+    background-color: #007cba;
+    color: #fff;
+}
+
+.sms-data-table .actions .delete {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+/* Status indicators */
+.sms-status {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.sms-status.active {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.sms-status.inactive {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.sms-status.pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.sms-status.completed {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+/* Loading spinner */
+.sms-loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #0073aa;
+    border-radius: 50%;
+    animation: sms-spin 1s linear infinite;
+}
+
+@keyframes sms-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .sms-dashboard-widgets {
+        grid-template-columns: 1fr;
+    }
+    
+    .sms-form-table th,
+    .sms-form-table td {
+        display: block;
+        width: 100%;
+        padding: 10px;
+    }
+    
+    .sms-form-table th {
+        background-color: transparent;
+        font-weight: bold;
+        border-bottom: none;
+        padding-bottom: 5px;
+    }
+    
+    .sms-data-table {
+        font-size: 14px;
+    }
+    
+    .sms-data-table th,
+    .sms-data-table td {
+        padding: 8px 10px;
+    }
+}
+
+/* Utility classes */
+.sms-text-center { text-align: center; }
+.sms-text-right { text-align: right; }
+.sms-mb-20 { margin-bottom: 20px; }
+.sms-mt-20 { margin-top: 20px; }
+.sms-hidden { display: none; }
+.sms-error { color: #dc3545; }
+.sms-success { color: #28a745; }
+.sms-warning { color: #ffc107; }
+/* S
+tudent-specific styles */
+.status-active {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.status-inactive {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.status-graduated {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.status-transferred {
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.status-suspended {
+    background-color: #f5c6cb;
+    color: #721c24;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+/* Student admin list table improvements */
+.wp-admin .wp-list-table .column-admission_number {
+    width: 120px;
+}
+
+.wp-admin .wp-list-table .column-full_name {
+    width: 200px;
+    font-weight: 600;
+}
+
+.wp-admin .wp-list-table .column-grade {
+    width: 100px;
+}
+
+.wp-admin .wp-list-table .column-status {
+    width: 100px;
+}
+
+.wp-admin .wp-list-table .column-admission_date {
+    width: 120px;
+}
+
+/* ACF field group styling improvements */
+.acf-field-group .acf-field {
+    margin-bottom: 20px;
+}
+
+.acf-field-group .acf-label {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.acf-field-group .acf-input {
+    margin-bottom: 10px;
+}
+
+/* Student quick info meta box */
+#student-quick-info .inside {
+    margin: 0;
+    padding: 12px;
+}
+
+#student-quick-info .inside p {
+    margin: 0 0 15px 0;
+    padding: 0;
+}
+
+#student-quick-info .inside p:last-child {
+    margin-bottom: 0;
+}
+
+/* Repeater field styling for parent details */
+.acf-repeater .acf-row {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: #f9f9f9;
+}
+
+.acf-repeater .acf-row-handle {
+    background-color: #0073aa;
+    color: white;
+    padding: 8px 12px;
+    margin: -15px -15px 15px -15px;
+    border-radius: 4px 4px 0 0;
+    font-weight: 600;
+}
+
+.acf-repeater .acf-row-handle .acf-icon {
+    color: white;
+}/* Class-sp
+ecific styles */
+.status-full {
+    background-color: #f5c6cb;
+    color: #721c24;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status-high {
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status-medium {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status-low {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status-archived {
+    background-color: #e2e3e5;
+    color: #383d41;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+/* Class admin list table improvements */
+.wp-admin .wp-list-table .column-class_name {
+    width: 200px;
+    font-weight: 600;
+}
+
+.wp-admin .wp-list-table .column-class_code {
+    width: 80px;
+}
+
+.wp-admin .wp-list-table .column-grade {
+    width: 100px;
+}
+
+.wp-admin .wp-list-table .column-teacher {
+    width: 150px;
+}
+
+.wp-admin .wp-list-table .column-enrollment {
+    width: 120px;
+}
+
+.wp-admin .wp-list-table .column-status {
+    width: 100px;
+}
+
+/* Enrollment progress styling */
+.enrollment-progress {
+    width: 100%;
+    height: 20px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #28a745 0%, #ffc107 75%, #dc3545 90%);
+    transition: width 0.3s ease;
+}
+
+.enrollment-stats p {
+    margin: 8px 0;
+}
+
+/* Subject assignment table styling */
+.acf-repeater .acf-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.acf-repeater .acf-table th,
+.acf-repeater .acf-table td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+}
+
+.acf-repeater .acf-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+/* Class fees repeater styling */
+.acf-field-class-fees .acf-repeater .acf-row {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    padding: 15px;
+}
+
+.acf-field-class-fees .acf-repeater .acf-row-handle {
+    background-color: #28a745;
+    color: white;
+    padding: 8px 12px;
+    margin: -15px -15px 15px -15px;
+    border-radius: 4px 4px 0 0;
+    font-weight: 600;
+}/* 
+Taxonomy-specific styles */
+
+/* Subject category indicators */
+.category-core {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.category-elective {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.category-extracurricular {
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.category-vocational {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+/* Grade section indicators */
+.section-pre_primary {
+    background-color: #e7f3ff;
+    color: #0066cc;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.section-primary {
+    background-color: #e8f5e8;
+    color: #2d5a2d;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.section-secondary {
+    background-color: #fff0e6;
+    color: #cc6600;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Academic year and term status indicators */
+.status-upcoming {
+    background-color: #e2e3e5;
+    color: #383d41;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.status-completed {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+/* Current indicators */
+.current-year,
+.current-term {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Color indicator for subjects */
+.color-indicator {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+    vertical-align: middle;
+}
+
+/* Taxonomy admin table improvements */
+.wp-admin .wp-list-table .column-subject_code,
+.wp-admin .wp-list-table .column-grade_level,
+.wp-admin .wp-list-table .column-term_number {
+    width: 80px;
+    text-align: center;
+}
+
+.wp-admin .wp-list-table .column-category,
+.wp-admin .wp-list-table .column-section,
+.wp-admin .wp-list-table .column-status {
+    width: 120px;
+}
+
+.wp-admin .wp-list-table .column-periods,
+.wp-admin .wp-list-table .column-weeks {
+    width: 100px;
+    text-align: center;
+}
+
+.wp-admin .wp-list-table .column-color {
+    width: 60px;
+    text-align: center;
+}
+
+.wp-admin .wp-list-table .column-period {
+    width: 180px;
+}
+
+.wp-admin .wp-list-table .column-current {
+    width: 100px;
+    text-align: center;
+}
+
+.wp-admin .wp-list-table .column-academic_year {
+    width: 150px;
+}
+
+.wp-admin .wp-list-table .column-age_range {
+    width: 100px;
+}
+
+.wp-admin .wp-list-table .column-core_subjects {
+    width: 200px;
+}
+
+.wp-admin .wp-list-table .column-terms {
+    width: 80px;
+    text-align: center;
+}
+
+/* ACF taxonomy field styling */
+.acf-taxonomy-field .acf-input select {
+    min-width: 200px;
+}
+
+.acf-taxonomy-field .acf-input .select2-container {
+    min-width: 200px;
+}
+
+/* Term structure and holiday repeater styling */
+.acf-field-term-structure .acf-repeater,
+.acf-field-holidays .acf-repeater,
+.acf-field-exam-periods .acf-repeater {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.acf-field-term-structure .acf-repeater .acf-table,
+.acf-field-holidays .acf-repeater .acf-table,
+.acf-field-exam-periods .acf-repeater .acf-table {
+    margin: 0;
+}
+
+.acf-field-term-structure .acf-repeater .acf-table th,
+.acf-field-holidays .acf-repeater .acf-table th,
+.acf-field-exam-periods .acf-repeater .acf-table th {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+    padding: 12px 8px;
+}
+
+.acf-field-term-structure .acf-repeater .acf-table td,
+.acf-field-holidays .acf-repeater .acf-table td,
+.acf-field-exam-periods .acf-repeater .acf-table td {
+    padding: 8px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* Assessment structure styling */
+.acf-field-assessment-structure .acf-repeater .acf-table th {
+    background-color: #e8f4f8;
+    color: #0c5460;
+}
+
+.acf-field-assessment-structure .acf-repeater .acf-row:nth-child(even) {
+    background-color: #f8f9fa;
+}/
+* Financial post types styling */
+
+/* Fee type indicators */
+.fee-type-tuition {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.fee-type-transport {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.fee-type-meals {
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.fee-type-books,
+.fee-type-uniform,
+.fee-type-activity,
+.fee-type-exam,
+.fee-type-registration,
+.fee-type-other {
+    background-color: #e2e3e5;
+    color: #383d41;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Mandatory fee indicators */
+.mandatory-yes {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.mandatory-no {
+    color: #6c757d;
+}
+
+/* Invoice status indicators */
+.invoice-status-draft {
+    background-color: #e2e3e5;
+    color: #383d41;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.invoice-status-sent {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.invoice-status-viewed {
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.invoice-status-partial {
+    background-color: #ffeaa7;
+    color: #d63031;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.invoice-status-paid {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.invoice-status-overdue {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.invoice-status-cancelled {
+    background-color: #f5c6cb;
+    color: #721c24;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+/* Payment status indicators */
+.payment-status-unpaid {
+    color: #dc3545;
+    font-size: 11px;
+}
+
+.payment-status-partial {
+    color: #fd7e14;
+    font-size: 11px;
+}
+
+.payment-status-paid {
+    color: #28a745;
+    font-size: 11px;
+}
+
+.payment-status-overpaid {
+    color: #17a2b8;
+    font-size: 11px;
+}
+
+/* Balance indicators */
+.balance-due {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.overpaid {
+    color: #17a2b8;
+    font-weight: bold;
+}
+
+.paid-full {
+    color: #28a745;
+    font-weight: bold;
+}
+
+/* Due date indicators */
+.overdue-date {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.due-soon {
+    color: #fd7e14;
+    font-weight: bold;
+}
+
+/* Transaction status indicators */
+.transaction-status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.transaction-status-processing {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.transaction-status-completed {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.transaction-status-failed {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.transaction-status-cancelled {
+    background-color: #e2e3e5;
+    color: #383d41;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.transaction-status-refunded {
+    background-color: #f0f0f0;
+    color: #495057;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.transaction-status-disputed {
+    background-color: #ffeaa7;
+    color: #d63031;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+/* Verification status indicators */
+.verification-unverified {
+    color: #fd7e14;
+    font-size: 11px;
+}
+
+.verification-verified {
+    color: #28a745;
+    font-size: 11px;
+}
+
+.verification-failed_verification {
+    color: #dc3545;
+    font-size: 11px;
+}
+
+.verification-manual_verification {
+    color: #6f42c1;
+    font-size: 11px;
+}
+
+/* Payment method indicators */
+.payment-method-mpesa {
+    background-color: #00d4aa;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.payment-method-airtel_money {
+    background-color: #ff0000;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.payment-method-bank_transfer {
+    background-color: #007bff;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.payment-method-cash {
+    background-color: #28a745;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.payment-method-cheque {
+    background-color: #6c757d;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.payment-method-card {
+    background-color: #17a2b8;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.payment-method-other {
+    background-color: #e2e3e5;
+    color: #383d41;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Refund amount styling */
+.refund-amount {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Financial admin table improvements */
+.wp-admin .wp-list-table .column-fee_name,
+.wp-admin .wp-list-table .column-invoice_number,
+.wp-admin .wp-list-table .column-transaction_number {
+    width: 150px;
+    font-weight: 600;
+}
+
+.wp-admin .wp-list-table .column-fee_code {
+    width: 80px;
+    text-align: center;
+}
+
+.wp-admin .wp-list-table .column-fee_type,
+.wp-admin .wp-list-table .column-payment_method {
+    width: 120px;
+}
+
+.wp-admin .wp-list-table .column-amount,
+.wp-admin .wp-list-table .column-total_amount,
+.wp-admin .wp-list-table .column-amount_paid,
+.wp-admin .wp-list-table .column-balance_due {
+    width: 100px;
+    text-align: right;
+}
+
+.wp-admin .wp-list-table .column-frequency {
+    width: 100px;
+}
+
+.wp-admin .wp-list-table .column-mandatory {
+    width: 80px;
+    text-align: center;
+}
+
+.wp-admin .wp-list-table .column-due_date,
+.wp-admin .wp-list-table .column-transaction_date {
+    width: 120px;
+}
+
+.wp-admin .wp-list-table .column-gateway {
+    width: 100px;
+}
+
+.wp-admin .wp-list-table .column-transaction_status {
+    width: 120px;
+}
+
+/* Meta box styling for financial post types */
+.fee-summary-stats p,
+.invoice-summary-stats p,
+.transaction-summary-stats p {
+    margin: 12px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.fee-summary-stats p:last-child,
+.invoice-summary-stats p:last-child,
+.transaction-summary-stats p:last-child {
+    border-bottom: none;
+}
+
+.fee-amount,
+.total-amount,
+.amount-paid,
+.transaction-amount {
+    font-size: 16px;
+    font-weight: bold;
+    color: #0073aa;
+}
+
+/* Invoice and transaction actions */
+.invoice-actions p,
+.transaction-actions p {
+    margin: 8px 0;
+}
+
+.invoice-actions .button,
+.transaction-actions .button {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+/* ACF repeater styling for invoice items */
+.acf-field-invoice-items .acf-repeater .acf-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.acf-field-invoice-items .acf-repeater .acf-table th,
+.acf-field-invoice-items .acf-repeater .acf-table td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+}
+
+.acf-field-invoice-items .acf-repeater .acf-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+/* Installment and discount repeater styling */
+.acf-field-installment-options .acf-repeater,
+.acf-field-discounts .acf-repeater {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.acf-field-installment-options .acf-repeater .acf-table th,
+.acf-field-discounts .acf-repeater .acf-table th {
+    background-color: #e8f4f8;
+    color: #0c5460;
+}
+
+/* Gateway response textarea */
+.acf-field-gateway-response textarea {
+    font-family: monospace;
+    font-size: 12px;
+    background-color: #f8f9fa;
+}

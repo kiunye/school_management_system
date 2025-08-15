@@ -1,0 +1,390 @@
+/**
+ * Public styles for School Management System
+ */
+
+/* Main container */
+.sms-public-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Dashboard styles */
+.sms-dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.sms-dashboard-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.sms-dashboard-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.sms-dashboard-card h3 {
+    margin-top: 0;
+    color: #333;
+    font-size: 18px;
+    border-bottom: 2px solid #0073aa;
+    padding-bottom: 10px;
+}
+
+.sms-dashboard-stat {
+    font-size: 24px;
+    font-weight: bold;
+    color: #0073aa;
+    margin: 15px 0;
+}
+
+/* Form styles */
+.sms-form {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+.sms-form h2 {
+    margin-top: 0;
+    color: #333;
+    border-bottom: 2px solid #0073aa;
+    padding-bottom: 10px;
+}
+
+.sms-form-group {
+    margin-bottom: 20px;
+}
+
+.sms-form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #555;
+}
+
+.sms-form-group input,
+.sms-form-group select,
+.sms-form-group textarea {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.sms-form-group input:focus,
+.sms-form-group select:focus,
+.sms-form-group textarea:focus {
+    outline: none;
+    border-color: #0073aa;
+    box-shadow: 0 0 0 2px rgba(0,115,170,0.2);
+}
+
+.sms-form-group textarea {
+    height: 120px;
+    resize: vertical;
+}
+
+.sms-form-group .error {
+    border-color: #dc3545;
+}
+
+.sms-form-group .error-message {
+    color: #dc3545;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* Button styles */
+.sms-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #0073aa;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.sms-btn:hover {
+    background-color: #005a87;
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.sms-btn:active {
+    transform: translateY(0);
+}
+
+.sms-btn-secondary {
+    background-color: #6c757d;
+}
+
+.sms-btn-secondary:hover {
+    background-color: #545b62;
+}
+
+.sms-btn-success {
+    background-color: #28a745;
+}
+
+.sms-btn-success:hover {
+    background-color: #218838;
+}
+
+.sms-btn-danger {
+    background-color: #dc3545;
+}
+
+.sms-btn-danger:hover {
+    background-color: #c82333;
+}
+
+.sms-btn-outline {
+    background-color: transparent;
+    border: 2px solid #0073aa;
+    color: #0073aa;
+}
+
+.sms-btn-outline:hover {
+    background-color: #0073aa;
+    color: #fff;
+}
+
+/* Table styles */
+.sms-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+
+.sms-table th,
+.sms-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.sms-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #495057;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+}
+
+.sms-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.sms-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Status badges */
+.sms-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.sms-badge-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.sms-badge-warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.sms-badge-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.sms-badge-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.sms-badge-secondary {
+    background-color: #e2e3e5;
+    color: #383d41;
+}
+
+/* Alert messages */
+.sms-alert {
+    padding: 15px 20px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    border-left: 4px solid;
+}
+
+.sms-alert-success {
+    background-color: #d4edda;
+    border-color: #28a745;
+    color: #155724;
+}
+
+.sms-alert-warning {
+    background-color: #fff3cd;
+    border-color: #ffc107;
+    color: #856404;
+}
+
+.sms-alert-danger {
+    background-color: #f8d7da;
+    border-color: #dc3545;
+    color: #721c24;
+}
+
+.sms-alert-info {
+    background-color: #d1ecf1;
+    border-color: #17a2b8;
+    color: #0c5460;
+}
+
+/* Loading spinner */
+.sms-loading {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #0073aa;
+    border-radius: 50%;
+    animation: sms-spin 1s linear infinite;
+}
+
+@keyframes sms-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Payment form styles */
+.sms-payment-methods {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.sms-payment-method {
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sms-payment-method:hover {
+    border-color: #0073aa;
+    background-color: #f8f9fa;
+}
+
+.sms-payment-method.selected {
+    border-color: #0073aa;
+    background-color: #e3f2fd;
+}
+
+.sms-payment-method img {
+    max-width: 80px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.sms-payment-method h4 {
+    margin: 0;
+    color: #333;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .sms-public-container {
+        padding: 15px;
+    }
+    
+    .sms-dashboard {
+        grid-template-columns: 1fr;
+    }
+    
+    .sms-form {
+        padding: 20px;
+    }
+    
+    .sms-table {
+        font-size: 14px;
+    }
+    
+    .sms-table th,
+    .sms-table td {
+        padding: 10px 8px;
+    }
+    
+    .sms-payment-methods {
+        grid-template-columns: 1fr;
+    }
+    
+    .sms-btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sms-table {
+        font-size: 12px;
+    }
+    
+    .sms-table th,
+    .sms-table td {
+        padding: 8px 5px;
+    }
+    
+    .sms-dashboard-card {
+        padding: 15px;
+    }
+    
+    .sms-form {
+        padding: 15px;
+    }
+}
+
+/* Utility classes */
+.sms-text-center { text-align: center; }
+.sms-text-right { text-align: right; }
+.sms-text-left { text-align: left; }
+.sms-mb-10 { margin-bottom: 10px; }
+.sms-mb-20 { margin-bottom: 20px; }
+.sms-mb-30 { margin-bottom: 30px; }
+.sms-mt-10 { margin-top: 10px; }
+.sms-mt-20 { margin-top: 20px; }
+.sms-mt-30 { margin-top: 30px; }
+.sms-hidden { display: none; }
+.sms-visible { display: block; }
