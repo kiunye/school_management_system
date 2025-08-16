@@ -100,7 +100,7 @@ try {
     }
     
     echo "<h2>7. Testing Configuration Manager</h2>\n";
-    $config_manager = new SMS_Gateway_Config_Manager();
+    $config_manager = SMS_Gateway_Config_Manager::get_instance();
     
     // Test saving configuration
     $save_result = $config_manager->save_config('airtel_money', $test_config);

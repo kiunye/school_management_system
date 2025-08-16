@@ -13,7 +13,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Get gateway configuration
-$config_manager = new SMS_Gateway_Config_Manager();
+$config_manager = SMS_Gateway_Config_Manager::get_instance();
 $config = $config_manager->get_config('airtel_money');
 
 if (!$config || !$config['enabled']) {

@@ -250,7 +250,29 @@ abstract class SMS_Payment_Gateway_Base {
      * @return string
      */
     protected function generate_reference($prefix = 'SMS') {
-        return $prefix . '_' . time() . '_' . wp_generate_password(8, false);
+        return $prefix . '_' . time() . '_' . $this->generate_random_string(8);
+    }
+
+    /**
+     * Generate random string
+     *
+     * @param int $length String length
+     * @return string Random string
+     */
+    protected function generate_random_string($length = 8) {
+        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $string = '';
+        
+        for ($i = 0; $i < $length; $i++) {
+            if (function_exists('random_int')) {
+                $string .= $characters[random_int(0, strlen($characters) - 1)];
+            } else {
+                // Fallback for older PHP versions
+                $string .= $characters[mt_rand(0, strlen($characters) - 1)];
+            }
+        }
+        
+        return $string;
     }
     
     /**

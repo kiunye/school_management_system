@@ -71,15 +71,17 @@ class SMS_Airtel_Money_Gateway extends SMS_Payment_Gateway_Base {
      * Initialize Airtel Money gateway
      */
     protected function init() {
-        // Validate required configuration
-        $required_config = ['client_id', 'client_secret', 'merchant_id'];
-        $validation = $this->validate_config($required_config);
-        
-        if (is_wp_error($validation)) {
-            $this->log_transaction('config_validation_failed', [
-                'error' => $validation->get_error_message()
-            ], 'error');
-            return;
+        // Only validate configuration if gateway is enabled
+        if ($this->enabled) {
+            $required_config = ['client_id', 'client_secret', 'merchant_id'];
+            $validation = $this->validate_config($required_config);
+            
+            if (is_wp_error($validation)) {
+                $this->log_transaction('config_validation_failed', [
+                    'error' => $validation->get_error_message()
+                ], 'error');
+                return;
+            }
         }
         
         // Set up callback URL
@@ -552,8 +554,10 @@ class SMS_Airtel_Money_Gateway extends SMS_Payment_Gateway_Base {
      * @return string
      */
     private function generate_transaction_id($reference) {
-        return 'AIRTEL_' . strtoupper($reference) . '_' . time() . '_' . wp_generate_password(6, false);
+        return 'AIRTEL_' . strtoupper($reference) . '_' . time() . '_' . $this->generate_random_string(6);
     }
+
+
     
     /**
      * Store pending transaction for tracking

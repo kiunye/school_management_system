@@ -198,4 +198,69 @@ abstract class SMS_Base {
             'message' => $message
         );
     }
+
+    /**
+     * Log activity with structured data.
+     */
+    protected function log_activity($user_id, $action, $object_type, $object_id, $metadata = array()) {
+        $activity_data = array(
+            'user_id' => $user_id,
+            'action' => $action,
+            'object_type' => $object_type,
+            'object_id' => $object_id,
+            'metadata' => $metadata,
+            'timestamp' => current_time('mysql'),
+            'ip_address' => $this->get_user_ip()
+        );
+        
+        // Log to WordPress error log
+        $this->log("Activity: {$action} on {$object_type} {$object_id}", 'info', $activity_data);
+        
+        // Store in database if activity log table exists
+        $this->store_activity_log($activity_data);
+        
+        // Trigger action for other components
+        do_action('sms_activity_logged', $activity_data);
+    }
+
+    /**
+     * Get user IP address.
+     */
+    protected function get_user_ip() {
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            return $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            return $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            return $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        }
+    }
+
+    /**
+     * Store activity log in database.
+     */
+    protected function store_activity_log($activity_data) {
+        global $wpdb;
+        
+        $table_name = $wpdb->prefix . 'sms_activity_log';
+        
+        // Check if table exists
+        if ($wpdb->get_var("SHOW TABLES LIKE '{$table_name}'") != $table_name) {
+            return false;
+        }
+        
+        return $wpdb->insert(
+            $table_name,
+            array(
+                'user_id' => $activity_data['user_id'],
+                'action' => $activity_data['action'],
+                'object_type' => $activity_data['object_type'],
+                'object_id' => $activity_data['object_id'],
+                'metadata' => json_encode($activity_data['metadata']),
+                'ip_address' => $activity_data['ip_address'],
+                'created_at' => $activity_data['timestamp']
+            ),
+            array('%d', '%s', '%s', '%d', '%s', '%s', '%s')
+        );
+    }
 }

@@ -541,7 +541,7 @@ class SMS_Payment_Processor extends SMS_Base {
      *
      * @return array Array of overdue invoice IDs
      */
-    private function get_overdue_invoices() {
+    public function get_overdue_invoices() {
         $args = [
             'post_type' => 'sms_invoices',
             'post_status' => 'publish',
@@ -573,7 +573,7 @@ class SMS_Payment_Processor extends SMS_Base {
      * @param int $days Number of days ahead to look
      * @return array Array of invoice IDs
      */
-    private function get_upcoming_due_invoices($days) {
+    public function get_upcoming_due_invoices($days) {
         $future_date = date('Y-m-d', strtotime("+{$days} days"));
         
         $args = [
@@ -606,7 +606,7 @@ class SMS_Payment_Processor extends SMS_Base {
      *
      * @return array Array of invoice IDs
      */
-    private function get_due_today_invoices() {
+    public function get_due_today_invoices() {
         $today = current_time('Y-m-d');
         
         $args = [
@@ -640,7 +640,7 @@ class SMS_Payment_Processor extends SMS_Base {
      * @param string $due_date Due date
      * @return int Days overdue
      */
-    private function calculate_days_overdue($due_date) {
+    public function calculate_days_overdue($due_date) {
         $due_timestamp = strtotime($due_date);
         $current_timestamp = current_time('timestamp');
         
@@ -774,7 +774,7 @@ class SMS_Payment_Processor extends SMS_Base {
      * @param int $student_id Student ID
      * @return array Student contact data
      */
-    private function get_student_contact_data($student_id) {
+    public function get_student_contact_data($student_id) {
         return [
             'student_id' => $student_id,
             'student_name' => get_field('full_name', $student_id),
@@ -792,7 +792,7 @@ class SMS_Payment_Processor extends SMS_Base {
      * @param int $invoice_id Invoice ID
      * @return array Invoice reminder data
      */
-    private function get_invoice_reminder_data($invoice_id) {
+    public function get_invoice_reminder_data($invoice_id) {
         return [
             'invoice_id' => $invoice_id,
             'invoice_number' => get_field('invoice_number', $invoice_id),

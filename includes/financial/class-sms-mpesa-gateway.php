@@ -69,15 +69,17 @@ class SMS_MPESA_Gateway extends SMS_Payment_Gateway_Base {
      * Initialize M-Pesa gateway
      */
     protected function init() {
-        // Validate required configuration
-        $required_config = ['consumer_key', 'consumer_secret', 'shortcode', 'passkey'];
-        $validation = $this->validate_config($required_config);
-        
-        if (is_wp_error($validation)) {
-            $this->log_transaction('config_validation_failed', [
-                'error' => $validation->get_error_message()
-            ], 'error');
-            return;
+        // Only validate configuration if gateway is enabled
+        if ($this->enabled) {
+            $required_config = ['consumer_key', 'consumer_secret', 'shortcode', 'passkey'];
+            $validation = $this->validate_config($required_config);
+            
+            if (is_wp_error($validation)) {
+                $this->log_transaction('config_validation_failed', [
+                    'error' => $validation->get_error_message()
+                ], 'error');
+                return;
+            }
         }
         
         // Set up callback URL

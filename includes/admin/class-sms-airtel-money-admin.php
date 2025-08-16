@@ -30,7 +30,7 @@ class SMS_Airtel_Money_Admin {
      * Constructor
      */
     public function __construct() {
-        $this->config_manager = new SMS_Gateway_Config_Manager();
+        $this->config_manager = SMS_Gateway_Config_Manager::get_instance();
         
         add_action('admin_menu', [$this, 'add_admin_menu']);
         add_action('admin_init', [$this, 'init_admin']);

@@ -112,7 +112,7 @@ if (!defined('ABSPATH')) {
             </div>
             
             <div class="gateway-actions">
-                <a href="<?php echo admin_url('admin.php?page=sms-settings&tab=payments'); ?>" class="button button-primary">
+                <a href="<?php echo admin_url('admin.php?page=sms-payment-gateways'); ?>" class="button button-primary">
                     <?php _e('Configure Payment Gateways', 'school-management-system'); ?>
                 </a>
             </div>

@@ -76,8 +76,31 @@ class SMS_Loader {
         require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-base.php';
         require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-security.php';
         require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-logger.php';
+        require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-communication-handler.php';
         
-        // Admin functionality
+        // Financial management and payment gateways (load in dependency order)
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-payment-gateway-base.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-gateway-config-manager.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-payment-gateway-manager.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-gateway-selector.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-mpesa-gateway.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-airtel-money-gateway.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-payment-gateway-init.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-fee-manager.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-fee-category-manager.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-fee-exemption-manager.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-invoice-generator.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-invoice-template-manager.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-invoice-status-tracker.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-transaction-manager.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-receipt-generator.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-transaction-status-tracker.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-transaction-integration.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-payment-processor.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-payment-history-tracker.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-payment-reminder-scheduler.php';
+
+        // Admin functionality (load after financial classes)
         require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-admin.php';
         require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-student-admission-form.php';
         require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-attendance-manager.php';
@@ -87,9 +110,18 @@ class SMS_Loader {
         require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-timetable-conflict-detector.php';
         require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-timetable-bulk-operations.php';
         require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-timetable-display-export.php';
+        require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-bulk-invoice-handler.php';
         require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-mpesa-admin.php';
         require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-airtel-money-admin.php';
         require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-transaction-admin.php';
+        require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-notice-manager.php';
+        require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-notice-attachments.php';
+        
+        // SMS Integration classes
+        require_once SMS_PLUGIN_DIR . 'includes/integrations/class-sms-africastalking-api.php';
+        require_once SMS_PLUGIN_DIR . 'includes/integrations/class-sms-template-manager.php';
+        require_once SMS_PLUGIN_DIR . 'includes/integrations/class-sms-queue-manager.php';
+        require_once SMS_PLUGIN_DIR . 'includes/integrations/class-sms-notification-scheduler.php';
         
         // Public functionality
         require_once SMS_PLUGIN_DIR . 'includes/public/class-sms-public.php';
@@ -112,13 +144,6 @@ class SMS_Loader {
         // Student management functionality
         require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-student-manager.php';
         require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-student-enrollment.php';
-        
-        // Financial management and payment gateways
-        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-payment-gateway-init.php';
-        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-transaction-manager.php';
-        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-receipt-generator.php';
-        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-transaction-status-tracker.php';
-        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-transaction-integration.php';
         
         // API endpoints
         require_once SMS_PLUGIN_DIR . 'includes/api/class-sms-api.php';

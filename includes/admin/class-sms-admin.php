@@ -133,6 +133,16 @@ class SMS_Admin extends SMS_Base {
             array($this, 'display_fees_page')
         );
 
+        // Notices submenu
+        add_submenu_page(
+            'school-management',
+            __('Notices', 'school-management-system'),
+            __('Notices', 'school-management-system'),
+            'manage_notices',
+            'sms-notices',
+            array($this, 'display_notices_page')
+        );
+
         // Reports submenu
         add_submenu_page(
             'school-management',
@@ -141,6 +151,26 @@ class SMS_Admin extends SMS_Base {
             'edit_posts',
             'sms-reports',
             array($this, 'display_reports_page')
+        );
+
+        // Payment Gateways submenu
+        add_submenu_page(
+            'school-management',
+            __('Payment Gateways', 'school-management-system'),
+            __('Payment Gateways', 'school-management-system'),
+            'manage_options',
+            'sms-payment-gateways',
+            array($this, 'display_payment_gateways_page')
+        );
+
+        // SMS Communication submenu
+        add_submenu_page(
+            'school-management',
+            __('SMS Communication', 'school-management-system'),
+            __('SMS Communication', 'school-management-system'),
+            'manage_options',
+            'sms-communication',
+            array($this, 'display_sms_communication_page')
         );
 
         // Settings submenu
@@ -229,6 +259,23 @@ class SMS_Admin extends SMS_Base {
     }
 
     /**
+     * Display notices page.
+     */
+    public function display_notices_page() {
+        if (!$this->check_capability('manage_notices')) {
+            wp_die(__('You do not have sufficient permissions to access this page.'));
+        }
+        
+        // Initialize notice manager if not already done
+        if (!class_exists('SMS_Notice_Manager')) {
+            require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-notice-manager.php';
+        }
+        
+        $notice_manager = new SMS_Notice_Manager();
+        $notice_manager->display_notices_page();
+    }
+
+    /**
      * Display reports page.
      */
     public function display_reports_page() {
@@ -237,6 +284,28 @@ class SMS_Admin extends SMS_Base {
         }
         
         include SMS_PLUGIN_DIR . 'admin/partials/reports.php';
+    }
+
+    /**
+     * Display payment gateways page.
+     */
+    public function display_payment_gateways_page() {
+        if (!$this->check_capability('manage_system_settings')) {
+            wp_die(__('You do not have sufficient permissions to access this page.'));
+        }
+        
+        include SMS_PLUGIN_DIR . 'admin/partials/payment-gateway-config.php';
+    }
+
+    /**
+     * Display SMS communication page.
+     */
+    public function display_sms_communication_page() {
+        if (!$this->check_capability('manage_system_settings')) {
+            wp_die(__('You do not have sufficient permissions to access this page.'));
+        }
+        
+        include SMS_PLUGIN_DIR . 'admin/partials/sms-settings.php';
     }
 
     /**

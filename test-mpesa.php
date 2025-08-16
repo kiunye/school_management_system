@@ -65,7 +65,7 @@ try {
 // Test 3: Check configuration
 echo '<h2>Configuration Test</h2>';
 try {
-    $config_manager = new SMS_Gateway_Config_Manager();
+    $config_manager = SMS_Gateway_Config_Manager::get_instance();
     $mpesa_config = $config_manager->get_config('mpesa');
     
     if ($mpesa_config) {

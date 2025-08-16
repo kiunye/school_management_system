@@ -47,7 +47,7 @@ if (isset($_POST['test_connection'])) {
 
 if (isset($_POST['save_config'])) {
     if (wp_verify_nonce($_POST['_wpnonce'], 'sms_mpesa_config')) {
-        $config_manager = new SMS_Gateway_Config_Manager();
+        $config_manager = SMS_Gateway_Config_Manager::get_instance();
         
         $config = [
             'enabled' => isset($_POST['enabled']),
@@ -79,7 +79,7 @@ if (isset($_POST['save_config'])) {
 }
 
 // Get current configuration
-$config_manager = new SMS_Gateway_Config_Manager();
+$config_manager = SMS_Gateway_Config_Manager::get_instance();
 $current_config = $config_manager->get_config('mpesa') ?: $config_manager->get_default_config_template('mpesa');
 ?>
 

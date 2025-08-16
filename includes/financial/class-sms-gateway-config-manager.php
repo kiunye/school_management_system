@@ -48,9 +48,28 @@ class SMS_Gateway_Config_Manager {
     private $encryption_key;
     
     /**
+     * Instance of this class
+     *
+     * @var SMS_Gateway_Config_Manager
+     */
+    private static $instance = null;
+    
+    /**
+     * Get singleton instance
+     *
+     * @return SMS_Gateway_Config_Manager
+     */
+    public static function get_instance() {
+        if (null === self::$instance) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+    
+    /**
      * Constructor
      */
-    public function __construct() {
+    private function __construct() {
         $this->encryption_key = $this->get_encryption_key();
         
         // Add hooks for admin interface
@@ -67,8 +86,31 @@ class SMS_Gateway_Config_Manager {
         $key = get_option('sms_gateway_encryption_key');
         
         if (!$key) {
-            $key = wp_generate_password(32, false);
+            // Generate a secure random key without relying on wp_generate_password
+            $key = $this->generate_secure_key(32);
             update_option('sms_gateway_encryption_key', $key);
+        }
+        
+        return $key;
+    }
+
+    /**
+     * Generate a secure random key
+     *
+     * @param int $length Key length
+     * @return string Generated key
+     */
+    private function generate_secure_key($length = 32) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $key = '';
+        
+        for ($i = 0; $i < $length; $i++) {
+            if (function_exists('random_int')) {
+                $key .= $characters[random_int(0, strlen($characters) - 1)];
+            } else {
+                // Fallback for older PHP versions
+                $key .= $characters[mt_rand(0, strlen($characters) - 1)];
+            }
         }
         
         return $key;

@@ -175,6 +175,28 @@ $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'general
                 <h2><?php _e('Payment Gateway Settings', 'school-management-system'); ?></h2>
                 <p><?php _e('Configure payment gateways to enable online fee payments.', 'school-management-system'); ?></p>
                 
+                <?php
+                // Include required classes
+                if (!class_exists('SMS_Gateway_Config_Manager')) {
+                    require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-gateway-config-manager.php';
+                }
+                
+                // Get gateway configurations
+                $mpesa_config = array();
+                $airtel_config = array();
+                
+                try {
+                    if (class_exists('SMS_Gateway_Config_Manager') && method_exists('SMS_Gateway_Config_Manager', 'get_instance')) {
+                        $config_manager = SMS_Gateway_Config_Manager::get_instance();
+                        $mpesa_config = $config_manager->get_config('mpesa') ?: array();
+                        $airtel_config = $config_manager->get_config('airtel_money') ?: array();
+                    }
+                } catch (Exception $e) {
+                    // Silently handle any initialization issues
+                    error_log('SMS Gateway Config Manager initialization failed: ' . $e->getMessage());
+                }
+                ?>
+                
                 <div class="payment-gateway-status">
                     <h3><?php _e('Available Payment Gateways', 'school-management-system'); ?></h3>
                     
@@ -185,8 +207,17 @@ $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'general
                                 <p><?php _e('Enable M-Pesa mobile payments for fee collection.', 'school-management-system'); ?></p>
                             </div>
                             <div class="gateway-status">
-                                <span class="status-badge status-inactive"><?php _e('Not Configured', 'school-management-system'); ?></span>
-                                <button class="button" onclick="alert('M-Pesa configuration will be implemented in future updates.')"><?php _e('Configure', 'school-management-system'); ?></button>
+                                <?php 
+                                $mpesa_configured = !empty($mpesa_config['consumer_key']);
+                                $mpesa_enabled = isset($mpesa_config['enabled']) && $mpesa_config['enabled'];
+                                ?>
+                                <span class="status-badge <?php echo $mpesa_configured ? 'status-active' : 'status-inactive'; ?>">
+                                    <?php echo $mpesa_configured ? __('Configured', 'school-management-system') : __('Not Configured', 'school-management-system'); ?>
+                                </span>
+                                <?php if ($mpesa_configured && $mpesa_enabled): ?>
+                                    <span class="status-badge status-enabled"><?php _e('Enabled', 'school-management-system'); ?></span>
+                                <?php endif; ?>
+                                <a href="<?php echo admin_url('admin.php?page=sms-payment-gateways&tab=mpesa'); ?>" class="button"><?php _e('Configure', 'school-management-system'); ?></a>
                             </div>
                         </div>
                         
@@ -196,8 +227,17 @@ $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'general
                                 <p><?php _e('Enable Airtel Money payments for fee collection.', 'school-management-system'); ?></p>
                             </div>
                             <div class="gateway-status">
-                                <span class="status-badge status-inactive"><?php _e('Not Configured', 'school-management-system'); ?></span>
-                                <button class="button" onclick="alert('Airtel Money configuration will be implemented in future updates.')"><?php _e('Configure', 'school-management-system'); ?></button>
+                                <?php 
+                                $airtel_configured = !empty($airtel_config['client_id']);
+                                $airtel_enabled = isset($airtel_config['enabled']) && $airtel_config['enabled'];
+                                ?>
+                                <span class="status-badge <?php echo $airtel_configured ? 'status-active' : 'status-inactive'; ?>">
+                                    <?php echo $airtel_configured ? __('Configured', 'school-management-system') : __('Not Configured', 'school-management-system'); ?>
+                                </span>
+                                <?php if ($airtel_configured && $airtel_enabled): ?>
+                                    <span class="status-badge status-enabled"><?php _e('Enabled', 'school-management-system'); ?></span>
+                                <?php endif; ?>
+                                <a href="<?php echo admin_url('admin.php?page=sms-payment-gateways&tab=airtel'); ?>" class="button"><?php _e('Configure', 'school-management-system'); ?></a>
                             </div>
                         </div>
                         
@@ -295,6 +335,33 @@ $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'general
         <?php endif; ?>
     </div>
 </div>
+
+<style>
+.status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-right: 5px;
+}
+
+.status-active { 
+    background: #d1e7dd; 
+    color: #0f5132; 
+}
+
+.status-inactive { 
+    background: #f8d7da; 
+    color: #721c24; 
+}
+
+.status-enabled { 
+    background: #d1e7dd; 
+    color: #0f5132; 
+}
+</style>
 
 <style>
 .sms-settings-content {

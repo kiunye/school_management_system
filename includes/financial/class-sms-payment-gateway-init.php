@@ -73,14 +73,14 @@ class SMS_Payment_Gateway_Init {
      */
     private function load_dependencies() {
         // Load base classes
-        require_once SMS_PLUGIN_PATH . 'includes/financial/class-sms-payment-gateway-base.php';
-        require_once SMS_PLUGIN_PATH . 'includes/financial/class-sms-payment-gateway-manager.php';
-        require_once SMS_PLUGIN_PATH . 'includes/financial/class-sms-gateway-selector.php';
-        require_once SMS_PLUGIN_PATH . 'includes/financial/class-sms-gateway-config-manager.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-payment-gateway-base.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-payment-gateway-manager.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-gateway-selector.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-gateway-config-manager.php';
         
         // Load gateway implementations
-        require_once SMS_PLUGIN_PATH . 'includes/financial/class-sms-mpesa-gateway.php';
-        require_once SMS_PLUGIN_PATH . 'includes/financial/class-sms-airtel-money-gateway.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-mpesa-gateway.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-airtel-money-gateway.php';
     }
     
     /**
@@ -88,7 +88,7 @@ class SMS_Payment_Gateway_Init {
      */
     private function init_components() {
         // Initialize configuration manager first
-        $this->config_manager = new SMS_Gateway_Config_Manager();
+        $this->config_manager = SMS_Gateway_Config_Manager::get_instance();
         
         // Initialize gateway manager
         $this->gateway_manager = SMS_Payment_Gateway_Manager::get_instance();
