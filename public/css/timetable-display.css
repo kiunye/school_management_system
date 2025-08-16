@@ -1,0 +1,616 @@
+/**
+ * Frontend Timetable Display Styles
+ *
+ * @package SchoolManagementSystem
+ * @subpackage Public/CSS
+ */
+
+/* Main Timetable Display Container */
+.sms-timetable-display,
+.sms-teacher-timetable-display,
+.sms-student-timetable-display {
+    background: #fff;
+    border: 1px solid #e1e5e9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+    overflow: hidden;
+}
+
+/* Timetable Controls */
+.timetable-controls {
+    background: #f8f9fa;
+    border-bottom: 1px solid #e1e5e9;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.timetable-controls h3 {
+    margin: 0;
+    color: #23282d;
+    font-size: 18px;
+}
+
+.teacher-info h3,
+.class-info h3 {
+    margin: 0;
+    color: #0073aa;
+    font-size: 16px;
+}
+
+.format-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.format-selector label {
+    font-weight: 600;
+    color: #23282d;
+    font-size: 14px;
+}
+
+.format-select {
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+    font-size: 14px;
+}
+
+.format-select:focus {
+    border-color: #0073aa;
+    box-shadow: 0 0 0 1px #0073aa;
+    outline: none;
+}
+
+.export-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.export-pdf-btn,
+.export-csv-btn {
+    padding: 8px 16px;
+    background: #0073aa;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.export-pdf-btn:hover,
+.export-csv-btn:hover {
+    background: #005a87;
+}
+
+.export-csv-btn {
+    background: #28a745;
+}
+
+.export-csv-btn:hover {
+    background: #218838;
+}
+
+/* Timetable Content */
+.timetable-content {
+    padding: 20px;
+    min-height: 300px;
+}
+
+.loading-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    color: #666;
+    font-style: italic;
+}
+
+.no-timetable-data {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+    font-style: italic;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+/* Grid Display */
+.timetable-grid-display {
+    overflow-x: auto;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+}
+
+.timetable-grid-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+    font-size: 13px;
+}
+
+.timetable-grid-table th,
+.timetable-grid-table td {
+    border: 1px solid #e1e5e9;
+    padding: 10px 8px;
+    text-align: center;
+    vertical-align: top;
+}
+
+.timetable-grid-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #23282d;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.time-column {
+    background: #e8f4fd !important;
+    min-width: 100px;
+    font-weight: 600;
+    font-size: 11px;
+}
+
+.day-column {
+    min-width: 120px;
+    font-size: 14px;
+}
+
+.time-cell {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #666;
+    font-size: 11px;
+}
+
+.time-display {
+    line-height: 1.2;
+}
+
+.day-cell {
+    height: 70px;
+    position: relative;
+    padding: 4px;
+}
+
+.day-cell.has-slot {
+    background: #f0f8ff;
+}
+
+.day-cell.empty-slot {
+    background: #fafafa;
+}
+
+.slot-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 4px;
+    font-size: 10px;
+    line-height: 1.2;
+}
+
+/* Slot Type Styles */
+.slot-type-lesson {
+    background: #e8f4fd;
+    border: 1px solid #0073aa;
+    color: #0073aa;
+}
+
+.slot-type-break {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    color: #856404;
+}
+
+.slot-type-lunch {
+    background: #d4edda;
+    border: 1px solid #28a745;
+    color: #155724;
+}
+
+.slot-type-assembly {
+    background: #f8d7da;
+    border: 1px solid #dc3545;
+    color: #721c24;
+}
+
+.slot-type-sports {
+    background: #d1ecf1;
+    border: 1px solid #17a2b8;
+    color: #0c5460;
+}
+
+.slot-type-study {
+    background: #e2e3e5;
+    border: 1px solid #6c757d;
+    color: #495057;
+}
+
+.slot-subject {
+    font-weight: 600;
+    margin-bottom: 2px;
+    font-size: 11px;
+}
+
+.slot-teacher,
+.slot-class {
+    font-size: 9px;
+    opacity: 0.8;
+    margin-bottom: 1px;
+}
+
+.slot-room {
+    font-size: 8px;
+    opacity: 0.7;
+}
+
+/* List Display */
+.timetable-list-display {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.day-section {
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.day-header {
+    background: #f8f9fa;
+    margin: 0;
+    padding: 12px 20px;
+    border-bottom: 1px solid #e1e5e9;
+    font-size: 16px;
+    font-weight: 600;
+    color: #23282d;
+}
+
+.day-slots {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.slot-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 15px;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    background: #fafafa;
+    transition: box-shadow 0.2s;
+}
+
+.slot-item:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.slot-time {
+    min-width: 100px;
+    font-weight: 600;
+    color: #0073aa;
+    font-size: 13px;
+}
+
+.slot-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.slot-details .slot-subject {
+    font-weight: 600;
+    color: #23282d;
+    font-size: 14px;
+}
+
+.slot-details .slot-teacher,
+.slot-details .slot-class {
+    color: #666;
+    font-size: 12px;
+}
+
+.slot-details .slot-room {
+    color: #999;
+    font-size: 11px;
+}
+
+/* Compact Display */
+.timetable-compact-display {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 15px;
+}
+
+.compact-slot-item {
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #fff;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.compact-slot-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.compact-slot-header {
+    background: #f8f9fa;
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e1e5e9;
+}
+
+.compact-day {
+    font-weight: 600;
+    color: #0073aa;
+    font-size: 12px;
+}
+
+.compact-time {
+    font-size: 11px;
+    color: #666;
+}
+
+.compact-slot-content {
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.compact-subject {
+    font-weight: 600;
+    color: #23282d;
+    font-size: 13px;
+}
+
+.compact-teacher,
+.compact-class {
+    color: #666;
+    font-size: 11px;
+}
+
+.compact-room {
+    color: #999;
+    font-size: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .timetable-controls {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .export-controls {
+        width: 100%;
+        justify-content: flex-start;
+    }
+    
+    .timetable-grid-table {
+        font-size: 11px;
+        min-width: 600px;
+    }
+    
+    .day-column {
+        min-width: 100px;
+    }
+    
+    .time-column {
+        min-width: 80px;
+    }
+    
+    .day-cell {
+        height: 60px;
+    }
+    
+    .slot-content {
+        font-size: 9px;
+    }
+    
+    .slot-subject {
+        font-size: 10px;
+    }
+    
+    .slot-teacher,
+    .slot-class {
+        font-size: 8px;
+    }
+    
+    .slot-room {
+        font-size: 7px;
+    }
+    
+    .timetable-compact-display {
+        grid-template-columns: 1fr;
+    }
+    
+    .day-slots {
+        padding: 10px;
+    }
+    
+    .slot-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .slot-time {
+        min-width: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .timetable-content {
+        padding: 15px;
+    }
+    
+    .timetable-controls {
+        padding: 10px 15px;
+    }
+    
+    .export-controls {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .export-pdf-btn,
+    .export-csv-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .timetable-grid-table {
+        font-size: 10px;
+        min-width: 500px;
+    }
+    
+    .day-cell {
+        height: 50px;
+        padding: 2px;
+    }
+    
+    .slot-content {
+        font-size: 8px;
+        padding: 2px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .timetable-controls,
+    .export-controls {
+        display: none !important;
+    }
+    
+    .sms-timetable-display,
+    .sms-teacher-timetable-display,
+    .sms-student-timetable-display {
+        border: none;
+        box-shadow: none;
+        margin: 0;
+    }
+    
+    .timetable-content {
+        padding: 0;
+    }
+    
+    .timetable-grid-table {
+        border: 2px solid #000;
+        font-size: 10px;
+    }
+    
+    .timetable-grid-table th,
+    .timetable-grid-table td {
+        border: 1px solid #000;
+        padding: 6px 4px;
+    }
+    
+    .timetable-grid-table th {
+        background: #f0f0f0 !important;
+        -webkit-print-color-adjust: exact;
+    }
+    
+    .slot-content {
+        font-size: 8px;
+    }
+    
+    .day-section {
+        break-inside: avoid;
+        margin-bottom: 15px;
+    }
+    
+    .compact-slot-item {
+        break-inside: avoid;
+        margin-bottom: 10px;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .sms-timetable-display,
+    .sms-teacher-timetable-display,
+    .sms-student-timetable-display {
+        background: #1a1a1a;
+        border-color: #333;
+        color: #e0e0e0;
+    }
+    
+    .timetable-controls {
+        background: #2a2a2a;
+        border-color: #333;
+    }
+    
+    .timetable-controls h3,
+    .teacher-info h3,
+    .class-info h3 {
+        color: #e0e0e0;
+    }
+    
+    .format-select {
+        background: #2a2a2a;
+        border-color: #555;
+        color: #e0e0e0;
+    }
+    
+    .timetable-grid-table th {
+        background: #2a2a2a;
+        color: #e0e0e0;
+    }
+    
+    .timetable-grid-table td {
+        border-color: #333;
+    }
+    
+    .day-cell.empty-slot {
+        background: #1a1a1a;
+    }
+    
+    .day-section {
+        border-color: #333;
+    }
+    
+    .day-header {
+        background: #2a2a2a;
+        color: #e0e0e0;
+        border-color: #333;
+    }
+    
+    .slot-item {
+        background: #2a2a2a;
+        border-color: #333;
+    }
+    
+    .compact-slot-item {
+        background: #2a2a2a;
+        border-color: #333;
+    }
+    
+    .compact-slot-header {
+        background: #333;
+        border-color: #555;
+    }
+}

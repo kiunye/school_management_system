@@ -83,13 +83,13 @@ if (!defined('WPINC')) {
         <div class="sms-widget">
             <h3><?php _e('Quick Actions', 'school-management-system'); ?></h3>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                <a href="<?php echo admin_url('post-new.php?post_type=cpt_students'); ?>" class="sms-btn">
+                <a href="<?php echo admin_url('post-new.php?post_type=sms_students'); ?>" class="sms-btn">
                     <?php _e('Add New Student', 'school-management-system'); ?>
                 </a>
-                <a href="<?php echo admin_url('post-new.php?post_type=cpt_classes'); ?>" class="sms-btn sms-btn-secondary">
+                <a href="<?php echo admin_url('post-new.php?post_type=sms_classes'); ?>" class="sms-btn sms-btn-secondary">
                     <?php _e('Create Class', 'school-management-system'); ?>
                 </a>
-                <a href="<?php echo admin_url('post-new.php?post_type=cpt_notices'); ?>" class="sms-btn sms-btn-success">
+                <a href="<?php echo admin_url('post-new.php?post_type=sms_notices'); ?>" class="sms-btn sms-btn-success">
                     <?php _e('Send Notice', 'school-management-system'); ?>
                 </a>
                 <a href="<?php echo admin_url('admin.php?page=sms-reports'); ?>" class="sms-btn sms-btn-secondary">

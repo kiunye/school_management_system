@@ -60,6 +60,7 @@ class SMS_Loader {
         $this->define_custom_post_types();
         $this->define_taxonomies();
         $this->define_student_management();
+        $this->define_payment_gateways();
         $this->define_api_hooks();
     }
 
@@ -82,6 +83,13 @@ class SMS_Loader {
         require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-attendance-manager.php';
         require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-attendance-reports.php';
         require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-attendance-notifications.php';
+        require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-timetable-builder.php';
+        require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-timetable-conflict-detector.php';
+        require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-timetable-bulk-operations.php';
+        require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-timetable-display-export.php';
+        require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-mpesa-admin.php';
+        require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-airtel-money-admin.php';
+        require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-transaction-admin.php';
         
         // Public functionality
         require_once SMS_PLUGIN_DIR . 'includes/public/class-sms-public.php';
@@ -104,6 +112,13 @@ class SMS_Loader {
         // Student management functionality
         require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-student-manager.php';
         require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-student-enrollment.php';
+        
+        // Financial management and payment gateways
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-payment-gateway-init.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-transaction-manager.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-receipt-generator.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-transaction-status-tracker.php';
+        require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-transaction-integration.php';
         
         // API endpoints
         require_once SMS_PLUGIN_DIR . 'includes/api/class-sms-api.php';
@@ -219,6 +234,31 @@ class SMS_Loader {
         // Initialize student enrollment manager
         if (class_exists('SMS_Student_Enrollment')) {
             new SMS_Student_Enrollment();
+        }
+    }
+    
+    /**
+     * Initialize payment gateway system.
+     */
+    private function define_payment_gateways() {
+        // Initialize payment gateway system
+        if (class_exists('SMS_Payment_Gateway_Init')) {
+            SMS_Payment_Gateway_Init::get_instance();
+        }
+        
+        // Initialize transaction management system
+        if (class_exists('SMS_Transaction_Manager')) {
+            SMS_Transaction_Manager::get_instance();
+        }
+        
+        // Initialize transaction status tracker
+        if (class_exists('SMS_Transaction_Status_Tracker')) {
+            SMS_Transaction_Status_Tracker::get_instance();
+        }
+        
+        // Initialize transaction integration
+        if (class_exists('SMS_Transaction_Integration')) {
+            SMS_Transaction_Integration::get_instance();
         }
     }
 

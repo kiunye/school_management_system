@@ -30,6 +30,7 @@ define('SMS_VERSION', '1.0.0');
  * Plugin directory path.
  */
 define('SMS_PLUGIN_DIR', plugin_dir_path(__FILE__));
+define('SMS_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
 /**
  * Plugin directory URL.

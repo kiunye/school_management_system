@@ -23,6 +23,18 @@ class SMS_Admin extends SMS_Base {
         parent::__construct();
         $this->plugin_name = $plugin_name;
         $this->version = $version;
+        
+        // Initialize timetable builder
+        $this->init_timetable_builder();
+    }
+    
+    /**
+     * Initialize timetable builder
+     */
+    private function init_timetable_builder() {
+        if (class_exists('SMS_Timetable_Builder')) {
+            new SMS_Timetable_Builder();
+        }
     }
 
     /**
