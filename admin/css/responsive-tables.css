@@ -1,0 +1,783 @@
+/**
+ * Responsive Data Tables CSS
+ * Mobile-first responsive design for data tables
+ */
+
+/* Data Table Wrapper */
+.sms-datatable-wrapper {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+/* Table Controls */
+.sms-datatable-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #e1e1e1;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.controls-left,
+.controls-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+/* Search Box */
+.search-box {
+    position: relative;
+    min-width: 250px;
+}
+
+.sms-table-search {
+    width: 100%;
+    padding: 8px 35px 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.search-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    pointer-events: none;
+}
+
+/* Filter Controls */
+.filter-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.sms-table-filter {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    min-width: 120px;
+}
+
+/* Export Controls */
+.export-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.sms-export-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    font-size: 13px;
+}
+
+/* View Controls */
+.view-controls {
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.view-toggle {
+    border: none;
+    background: white;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.view-toggle:hover {
+    background: #f0f0f0;
+}
+
+.view-toggle.active {
+    background: #0073aa;
+    color: white;
+}
+
+.view-toggle .dashicons {
+    font-size: 16px;
+}
+
+/* Bulk Actions */
+.sms-bulk-actions {
+    padding: 15px 20px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e1e1e1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sms-bulk-actions select {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Loading Indicator */
+.sms-table-loading {
+    padding: 40px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.9);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-spinner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+.loading-spinner .dashicons {
+    animation: spin 1s linear infinite;
+}
+
+/* Table Responsive Container */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Base Table Styles */
+.sms-responsive-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    background: white;
+}
+
+.sms-responsive-table th,
+.sms-responsive-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e1e1e1;
+    vertical-align: middle;
+}
+
+.sms-responsive-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #333;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+/* Sortable Headers */
+.sms-responsive-table th.sortable {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    padding-right: 30px;
+}
+
+.sms-responsive-table th.sortable:hover {
+    background: #e9ecef;
+}
+
+.sort-indicator {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+}
+
+.sort-indicator .dashicons {
+    font-size: 12px;
+    color: #ccc;
+    height: 8px;
+}
+
+.sms-responsive-table th.sorted-asc .sort-indicator .dashicons-arrow-up-alt2,
+.sms-responsive-table th.sorted-desc .sort-indicator .dashicons-arrow-down-alt2 {
+    color: #0073aa;
+}
+
+/* Checkbox Column */
+.check-column {
+    width: 40px;
+    text-align: center;
+}
+
+.check-column input[type="checkbox"] {
+    margin: 0;
+}
+
+/* Actions Column */
+.actions-column {
+    width: 120px;
+    text-align: center;
+}
+
+.row-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+}
+
+.row-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    text-decoration: none;
+    border-radius: 3px;
+    font-size: 12px;
+    transition: all 0.2s ease;
+}
+
+.row-action:hover {
+    text-decoration: none;
+}
+
+.row-action.edit {
+    color: #0073aa;
+    background: rgba(0, 115, 170, 0.1);
+}
+
+.row-action.edit:hover {
+    background: rgba(0, 115, 170, 0.2);
+}
+
+.row-action.delete {
+    color: #d63638;
+    background: rgba(214, 54, 56, 0.1);
+}
+
+.row-action.delete:hover {
+    background: rgba(214, 54, 56, 0.2);
+}
+
+.row-action.view {
+    color: #00a32a;
+    background: rgba(0, 163, 42, 0.1);
+}
+
+.row-action.view:hover {
+    background: rgba(0, 163, 42, 0.2);
+}
+
+/* Status Badges */
+.status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-badge.status-active {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-badge.status-inactive {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.status-badge.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-badge.status-completed {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+/* Table Images */
+.table-image {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+/* No Items Message */
+.no-items-message {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+    font-style: italic;
+}
+
+/* Cards View */
+.cards-view {
+    display: none;
+    padding: 20px;
+}
+
+.cards-view.active {
+    display: block;
+}
+
+.sms-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.sms-card-item {
+    background: white;
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    padding: 20px;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.sms-card-item:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+.card-selector {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+.card-content {
+    margin-bottom: 15px;
+}
+
+.card-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.card-field:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+}
+
+.card-field label {
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+    flex: 0 0 40%;
+}
+
+.card-field span {
+    flex: 1;
+    text-align: right;
+}
+
+.card-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    padding-top: 15px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.no-items-card {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.empty-state {
+    color: #666;
+}
+
+.empty-state .dashicons {
+    font-size: 48px;
+    color: #ccc;
+    margin-bottom: 20px;
+}
+
+.empty-state h3 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* Table Footer */
+.sms-datatable-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: #f8f9fa;
+    border-top: 1px solid #e1e1e1;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.table-info {
+    font-size: 13px;
+    color: #666;
+}
+
+.filtered-info {
+    font-style: italic;
+    margin-left: 10px;
+}
+
+/* Pagination */
+.pagination-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.pagination-btn {
+    border: 1px solid #ddd;
+    background: white;
+    padding: 6px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background: #f0f0f0;
+    border-color: #999;
+}
+
+.pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pagination-btn .dashicons {
+    font-size: 14px;
+}
+
+.pagination-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 10px;
+    font-size: 13px;
+}
+
+.current-page {
+    width: 50px;
+    padding: 4px 6px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    text-align: center;
+    font-size: 13px;
+}
+
+/* Form Validation Styles */
+.sms-form-validation {
+    margin-top: 20px;
+}
+
+.validation-error {
+    color: #d63638;
+    font-size: 13px;
+    margin-top: 5px;
+    display: block;
+}
+
+.field-error input,
+.field-error select,
+.field-error textarea {
+    border-color: #d63638;
+    box-shadow: 0 0 0 1px rgba(214, 54, 56, 0.2);
+}
+
+.validation-success {
+    color: #00a32a;
+    font-size: 13px;
+    margin-top: 5px;
+    display: block;
+}
+
+.field-success input,
+.field-success select,
+.field-success textarea {
+    border-color: #00a32a;
+    box-shadow: 0 0 0 1px rgba(0, 163, 42, 0.2);
+}
+
+/* Form Error Summary */
+.error-summary {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 20px;
+    color: #721c24;
+}
+
+.error-summary h4 {
+    margin: 0 0 10px 0;
+    color: #721c24;
+}
+
+.error-summary ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.error-summary li {
+    margin-bottom: 5px;
+}
+
+/* Success Messages */
+.success-message {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 20px;
+    color: #155724;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .sms-datatable-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .controls-left,
+    .controls-right {
+        justify-content: space-between;
+        width: 100%;
+    }
+    
+    .search-box {
+        min-width: auto;
+        flex: 1;
+    }
+    
+    .sms-cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    /* Hide table view on mobile, show cards */
+    .table-view {
+        display: none !important;
+    }
+    
+    .cards-view {
+        display: block !important;
+    }
+    
+    .view-controls {
+        display: none;
+    }
+    
+    .sms-datatable-controls {
+        padding: 15px;
+    }
+    
+    .controls-left,
+    .controls-right {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .export-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .sms-export-btn {
+        flex: 1;
+        justify-content: center;
+    }
+    
+    .sms-cards-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .sms-card-item {
+        padding: 15px;
+    }
+    
+    .card-field {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .card-field label {
+        flex: none;
+    }
+    
+    .card-field span {
+        text-align: left;
+    }
+    
+    .sms-datatable-footer {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+    
+    .pagination-wrapper {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .sms-datatable-wrapper {
+        margin: 0 -20px 20px -20px;
+        border-radius: 0;
+    }
+    
+    .sms-datatable-controls {
+        padding: 10px;
+    }
+    
+    .search-box {
+        min-width: auto;
+    }
+    
+    .sms-table-search {
+        font-size: 16px; /* Prevent zoom on iOS */
+    }
+    
+    .filter-controls {
+        width: 100%;
+    }
+    
+    .sms-table-filter {
+        width: 100%;
+    }
+    
+    .export-controls {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .sms-export-btn {
+        width: 100%;
+    }
+    
+    .sms-bulk-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+    
+    .sms-bulk-actions select {
+        width: 100%;
+    }
+    
+    .pagination-info {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .current-page {
+        width: 60px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .sms-datatable-controls,
+    .sms-bulk-actions,
+    .sms-datatable-footer,
+    .actions-column,
+    .check-column,
+    .row-actions {
+        display: none !important;
+    }
+    
+    .sms-datatable-wrapper {
+        box-shadow: none;
+        border: 1px solid #000;
+    }
+    
+    .sms-responsive-table {
+        font-size: 12px;
+    }
+    
+    .sms-responsive-table th,
+    .sms-responsive-table td {
+        padding: 8px;
+        border: 1px solid #000;
+    }
+    
+    .cards-view {
+        display: none !important;
+    }
+    
+    .table-view {
+        display: block !important;
+    }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .sms-responsive-table th {
+        background: #000;
+        color: #fff;
+    }
+    
+    .sms-responsive-table td {
+        border-color: #000;
+    }
+    
+    .status-badge {
+        border: 2px solid currentColor;
+    }
+    
+    .row-action {
+        border: 1px solid currentColor;
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    .sms-card-item,
+    .row-action,
+    .pagination-btn,
+    .view-toggle {
+        transition: none;
+    }
+    
+    .loading-spinner .dashicons {
+        animation: none;
+    }
+    
+    .sms-card-item:hover {
+        transform: none;
+    }
+}

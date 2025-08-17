@@ -20,13 +20,36 @@ if (!defined('WPINC')) {
 class SMS_i18n {
 
     /**
+     * Whether textdomain has been loaded
+     *
+     * @var bool
+     */
+    private static $textdomain_loaded = false;
+
+    /**
      * Load the plugin text domain for translation.
      */
     public function load_plugin_textdomain() {
+        if (self::$textdomain_loaded) {
+            return;
+        }
+
         load_plugin_textdomain(
             'school-management-system',
             false,
             dirname(dirname(plugin_basename(__FILE__))) . '/languages/'
         );
+        
+        self::$textdomain_loaded = true;
+    }
+
+    /**
+     * Ensure textdomain is loaded (can be called early if needed)
+     */
+    public static function ensure_textdomain_loaded() {
+        if (!self::$textdomain_loaded) {
+            $instance = new self();
+            $instance->load_plugin_textdomain();
+        }
     }
 }

@@ -26,6 +26,9 @@ class SMS_Admin extends SMS_Base {
         
         // Initialize timetable builder
         $this->init_timetable_builder();
+        
+        // Initialize dashboard manager
+        $this->init_dashboard_manager();
     }
     
     /**
@@ -36,6 +39,16 @@ class SMS_Admin extends SMS_Base {
             new SMS_Timetable_Builder();
         }
     }
+    
+    /**
+     * Initialize dashboard manager
+     */
+    private function init_dashboard_manager() {
+        if (!class_exists('SMS_Dashboard_Manager')) {
+            require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-dashboard-manager.php';
+        }
+        new SMS_Dashboard_Manager();
+    }
 
     /**
      * Register the stylesheets for the admin area.
@@ -44,6 +57,24 @@ class SMS_Admin extends SMS_Base {
         wp_enqueue_style(
             $this->plugin_name,
             SMS_PLUGIN_URL . 'admin/css/sms-admin.css',
+            array(),
+            $this->version,
+            'all'
+        );
+        
+        // Enqueue dashboard styles
+        wp_enqueue_style(
+            $this->plugin_name . '-dashboard',
+            SMS_PLUGIN_URL . 'admin/css/dashboard-styles.css',
+            array(),
+            $this->version,
+            'all'
+        );
+        
+        // Enqueue responsive table styles
+        wp_enqueue_style(
+            $this->plugin_name . '-responsive-tables',
+            SMS_PLUGIN_URL . 'admin/css/responsive-tables.css',
             array(),
             $this->version,
             'all'
@@ -61,6 +92,24 @@ class SMS_Admin extends SMS_Base {
             $this->version,
             false
         );
+        
+        // Enqueue dashboard functionality
+        wp_enqueue_script(
+            $this->plugin_name . '-dashboard',
+            SMS_PLUGIN_URL . 'admin/js/dashboard-functionality.js',
+            array('jquery'),
+            $this->version,
+            false
+        );
+        
+        // Enqueue responsive table functionality
+        wp_enqueue_script(
+            $this->plugin_name . '-responsive-tables',
+            SMS_PLUGIN_URL . 'admin/js/responsive-tables.js',
+            array('jquery'),
+            $this->version,
+            false
+        );
 
         // Localize script for AJAX
         wp_localize_script(
@@ -68,11 +117,16 @@ class SMS_Admin extends SMS_Base {
             'sms_admin_ajax',
             array(
                 'ajax_url' => admin_url('admin-ajax.php'),
+                'admin_url' => admin_url(),
                 'nonce' => wp_create_nonce('sms_admin_nonce'),
                 'strings' => array(
                     'confirm_delete' => __('Are you sure you want to delete this item?', 'school-management-system'),
                     'processing' => __('Processing...', 'school-management-system'),
-                    'error' => __('An error occurred. Please try again.', 'school-management-system')
+                    'error' => __('An error occurred. Please try again.', 'school-management-system'),
+                    'no_activity' => __('No recent activity found.', 'school-management-system'),
+                    'no_notifications' => __('No notifications at this time.', 'school-management-system'),
+                    'no_items_selected' => __('Please select items and choose an action.', 'school-management-system'),
+                    'confirm_bulk_action' => __('Are you sure you want to perform this action on the selected items?', 'school-management-system')
                 )
             )
         );

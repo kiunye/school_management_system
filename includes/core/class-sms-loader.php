@@ -60,6 +60,7 @@ class SMS_Loader {
         $this->define_custom_post_types();
         $this->define_taxonomies();
         $this->define_student_management();
+        $this->define_transport_management();
         $this->define_payment_gateways();
         $this->define_api_hooks();
     }
@@ -122,6 +123,7 @@ class SMS_Loader {
         require_once SMS_PLUGIN_DIR . 'includes/integrations/class-sms-template-manager.php';
         require_once SMS_PLUGIN_DIR . 'includes/integrations/class-sms-queue-manager.php';
         require_once SMS_PLUGIN_DIR . 'includes/integrations/class-sms-notification-scheduler.php';
+        require_once SMS_PLUGIN_DIR . 'includes/integrations/class-sms-transport-notifications.php';
         
         // Public functionality
         require_once SMS_PLUGIN_DIR . 'includes/public/class-sms-public.php';
@@ -144,6 +146,12 @@ class SMS_Loader {
         // Student management functionality
         require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-student-manager.php';
         require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-student-enrollment.php';
+        
+        // Transport management functionality
+        require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-route-manager.php';
+        require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-bus-manager.php';
+        require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-transport-assigner.php';
+        require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-transport-admin.php';
         
         // API endpoints
         require_once SMS_PLUGIN_DIR . 'includes/api/class-sms-api.php';
@@ -188,7 +196,8 @@ class SMS_Loader {
      */
     private function set_locale() {
         $plugin_i18n = new SMS_i18n();
-        $this->add_action('plugins_loaded', $plugin_i18n, 'load_plugin_textdomain');
+        // Load textdomain on init hook to avoid early loading warnings
+        $this->add_action('init', $plugin_i18n, 'load_plugin_textdomain', 1);
     }
 
     /**
@@ -259,6 +268,36 @@ class SMS_Loader {
         // Initialize student enrollment manager
         if (class_exists('SMS_Student_Enrollment')) {
             new SMS_Student_Enrollment();
+        }
+    }
+    
+    /**
+     * Initialize transport management functionality.
+     */
+    private function define_transport_management() {
+        // Initialize route manager
+        if (class_exists('SMS_Route_Manager')) {
+            new SMS_Route_Manager();
+        }
+        
+        // Initialize bus manager
+        if (class_exists('SMS_Bus_Manager')) {
+            new SMS_Bus_Manager();
+        }
+        
+        // Initialize transport assigner
+        if (class_exists('SMS_Transport_Assigner')) {
+            new SMS_Transport_Assigner();
+        }
+        
+        // Initialize transport admin
+        if (class_exists('SMS_Transport_Admin') && is_admin()) {
+            new SMS_Transport_Admin();
+        }
+        
+        // Initialize transport notifications
+        if (class_exists('SMS_Transport_Notifications')) {
+            new SMS_Transport_Notifications();
         }
     }
     

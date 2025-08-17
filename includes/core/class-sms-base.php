@@ -44,8 +44,8 @@ abstract class SMS_Base {
     public function __construct() {
         $this->version = SMS_VERSION;
         $this->plugin_name = 'school-management-system';
-        $this->logger = new SMS_Logger();
-        $this->security = new SMS_Security();
+        $this->logger = SMS_Logger::get_instance();
+        $this->security = SMS_Security::get_instance();
     }
 
     /**

@@ -14,6 +14,11 @@ if (!defined('WPINC')) {
     die;
 }
 
+// Ensure textdomain is loaded for translations
+if (class_exists('SMS_i18n')) {
+    SMS_i18n::ensure_textdomain_loaded();
+}
+
 // Include required gateway classes
 require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-gateway-config-manager.php';
 require_once SMS_PLUGIN_DIR . 'includes/financial/class-sms-payment-gateway-base.php';

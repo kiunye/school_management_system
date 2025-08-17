@@ -11,6 +11,11 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+// Ensure textdomain is loaded for translations
+if (class_exists('SMS_i18n')) {
+    SMS_i18n::ensure_textdomain_loaded();
+}
+
 // Handle form submissions
 if (isset($_POST['submit']) && wp_verify_nonce($_POST['sms_settings_nonce'], 'sms_settings_action')) {
     // Save general settings

@@ -394,14 +394,14 @@ class SMS_Communication_Handler extends SMS_Base {
     /**
      * Validate email address
      */
-    private function is_valid_email($email) {
+    protected function is_valid_email($email) {
         return is_email($email);
     }
 
     /**
      * Format phone number for SMS
      */
-    private function format_phone($phone) {
+    protected function format_phone($phone) {
         // Remove all non-numeric characters
         $phone = preg_replace('/[^0-9]/', '', $phone);
         
@@ -422,7 +422,7 @@ class SMS_Communication_Handler extends SMS_Base {
     /**
      * Log communication activity
      */
-    private function log($message, $level = 'info') {
+    protected function log($message, $level = 'info', $context = array()) {
         if (class_exists('SMS_Logger')) {
             $logger = new SMS_Logger();
             $logger->log($message, $level, 'communication');
