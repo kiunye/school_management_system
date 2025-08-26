@@ -11,11 +11,17 @@ if (!defined('WPINC')) {
     die;
 }
 
-// Ensure dashboard data is available
+// Ensure dashboard data is available and prevent duplicate rendering
 if (!isset($dashboard_data)) {
     $dashboard_manager = new SMS_Dashboard_Manager();
     $dashboard_data = $dashboard_manager->get_admin_dashboard_data();
 }
+
+// Prevent duplicate rendering
+if (defined('SMS_ADMIN_DASHBOARD_RENDERED')) {
+    return;
+}
+define('SMS_ADMIN_DASHBOARD_RENDERED', true);
 
 $system_stats = $dashboard_data['system_stats'];
 $financial_stats = $dashboard_data['financial_stats'];

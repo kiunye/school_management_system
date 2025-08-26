@@ -20,10 +20,10 @@ class SMS_User_Roles extends SMS_Base {
      * Available SMS roles.
      */
     const SMS_ROLES = [
-        'school_administrator' => 'School Administrator',
-        'teacher' => 'Teacher', 
-        'parent' => 'Parent',
-        'student' => 'Student'
+        'sms_admin' => 'School Administrator',
+        'sms_teacher' => 'Teacher', 
+        'sms_parent' => 'Parent',
+        'sms_student' => 'Student'
     ];
 
     /**
@@ -58,10 +58,10 @@ class SMS_User_Roles extends SMS_Base {
         $this->remove_custom_roles();
         
         // Create new roles
-        $this->create_school_administrator_role();
-        $this->create_teacher_role();
-        $this->create_parent_role();
-        $this->create_student_role();
+        $this->create_sms_admin_role();
+        $this->create_sms_teacher_role();
+        $this->create_sms_parent_role();
+        $this->create_sms_student_role();
         
         // Update administrator capabilities
         $this->update_administrator_capabilities();
@@ -71,7 +71,7 @@ class SMS_User_Roles extends SMS_Base {
      * Remove existing custom roles.
      */
     private function remove_custom_roles() {
-        $custom_roles = array('school_administrator', 'teacher', 'parent', 'student');
+        $custom_roles = array('sms_admin', 'sms_teacher', 'sms_parent', 'sms_student', 'school_administrator', 'teacher', 'parent', 'student');
         
         foreach ($custom_roles as $role) {
             remove_role($role);
@@ -79,10 +79,10 @@ class SMS_User_Roles extends SMS_Base {
     }
 
     /**
-     * Create school administrator role.
+     * Create SMS administrator role.
      */
-    private function create_school_administrator_role() {
-        add_role('school_administrator', __('School Administrator', 'school-management-system'), array(
+    private function create_sms_admin_role() {
+        add_role('sms_admin', __('School Administrator', 'school-management-system'), array(
             // WordPress core capabilities
             'read' => true,
             'edit_posts' => true,
@@ -116,10 +116,10 @@ class SMS_User_Roles extends SMS_Base {
     }
 
     /**
-     * Create teacher role.
+     * Create SMS teacher role.
      */
-    private function create_teacher_role() {
-        add_role('teacher', __('Teacher', 'school-management-system'), array(
+    private function create_sms_teacher_role() {
+        add_role('sms_teacher', __('Teacher', 'school-management-system'), array(
             // WordPress core capabilities
             'read' => true,
             'edit_posts' => true,
@@ -143,10 +143,10 @@ class SMS_User_Roles extends SMS_Base {
     }
 
     /**
-     * Create parent role.
+     * Create SMS parent role.
      */
-    private function create_parent_role() {
-        add_role('parent', __('Parent', 'school-management-system'), array(
+    private function create_sms_parent_role() {
+        add_role('sms_parent', __('Parent', 'school-management-system'), array(
             // WordPress core capabilities
             'read' => true,
             
@@ -167,10 +167,10 @@ class SMS_User_Roles extends SMS_Base {
     }
 
     /**
-     * Create student role.
+     * Create SMS student role.
      */
-    private function create_student_role() {
-        add_role('student', __('Student', 'school-management-system'), array(
+    private function create_sms_student_role() {
+        add_role('sms_student', __('Student', 'school-management-system'), array(
             // WordPress core capabilities
             'read' => true,
             
@@ -200,7 +200,12 @@ class SMS_User_Roles extends SMS_Base {
                 'manage_transport', 'manage_notices', 'view_all_reports',
                 'manage_attendance', 'manage_timetables', 'process_payments',
                 'manage_invoices', 'view_financial_data', 'manage_communication',
-                'export_data', 'import_data'
+                'export_data', 'import_data',
+                // Teacher capabilities for admins
+                'edit_assigned_classes', 'mark_attendance', 'create_lessons',
+                'view_student_records', 'create_academic_notices', 'view_class_reports',
+                'manage_class_timetable', 'view_class_fees', 'communicate_with_parents',
+                'view_assigned_students', 'create_assignments', 'grade_assignments'
             );
             
             foreach ($admin_capabilities as $cap) {

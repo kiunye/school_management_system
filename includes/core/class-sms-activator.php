@@ -46,7 +46,13 @@ class SMS_Activator {
      * Create custom database tables.
      */
     private static function create_custom_tables() {
-        global $wpdb;
+        // Load database setup class
+        require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-database-setup.php';
+        
+        if (class_exists('SMS_Database_Setup')) {
+            $db_setup = new SMS_Database_Setup();
+            $db_setup->create_tables();
+        }
 
         $charset_collate = $wpdb->get_charset_collate();
 

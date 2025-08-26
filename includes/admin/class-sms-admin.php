@@ -26,9 +26,6 @@ class SMS_Admin extends SMS_Base {
         
         // Initialize timetable builder
         $this->init_timetable_builder();
-        
-        // Initialize dashboard manager
-        $this->init_dashboard_manager();
     }
     
     /**
@@ -40,15 +37,7 @@ class SMS_Admin extends SMS_Base {
         }
     }
     
-    /**
-     * Initialize dashboard manager
-     */
-    private function init_dashboard_manager() {
-        if (!class_exists('SMS_Dashboard_Manager')) {
-            require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-dashboard-manager.php';
-        }
-        new SMS_Dashboard_Manager();
-    }
+
 
     /**
      * Register the stylesheets for the admin area.
@@ -75,6 +64,15 @@ class SMS_Admin extends SMS_Base {
         wp_enqueue_style(
             $this->plugin_name . '-responsive-tables',
             SMS_PLUGIN_URL . 'admin/css/responsive-tables.css',
+            array(),
+            $this->version,
+            'all'
+        );
+        
+        // Enqueue dashboard fix styles
+        wp_enqueue_style(
+            $this->plugin_name . '-dashboard-fix',
+            SMS_PLUGIN_URL . 'admin/css/dashboard-fix.css',
             array(),
             $this->version,
             'all'
@@ -140,29 +138,21 @@ class SMS_Admin extends SMS_Base {
         add_menu_page(
             __('School Management', 'school-management-system'),
             __('School Management', 'school-management-system'),
-            'edit_posts',
+            'read', // Changed from 'edit_posts' to 'read' for broader access
             'school-management',
-            array($this, 'display_dashboard'),
+            array($this, 'redirect_to_appropriate_dashboard'),
             'dashicons-graduation-cap',
             30
         );
 
-        // Dashboard submenu
-        add_submenu_page(
-            'school-management',
-            __('Dashboard', 'school-management-system'),
-            __('Dashboard', 'school-management-system'),
-            'edit_posts',
-            'school-management',
-            array($this, 'display_dashboard')
-        );
+        // Note: Dashboard submenu is handled by SMS_Dashboard_Manager for role-specific dashboards
 
         // Students submenu
         add_submenu_page(
             'school-management',
             __('Students', 'school-management-system'),
             __('Students', 'school-management-system'),
-            'edit_posts',
+            'view_student_records', // Use custom capability for teachers
             'sms-students',
             array($this, 'display_students_page')
         );
@@ -172,7 +162,7 @@ class SMS_Admin extends SMS_Base {
             'school-management',
             __('Classes', 'school-management-system'),
             __('Classes', 'school-management-system'),
-            'edit_posts',
+            'edit_assigned_classes', // Use custom capability for teachers
             'sms-classes',
             array($this, 'display_classes_page')
         );
@@ -236,6 +226,18 @@ class SMS_Admin extends SMS_Base {
             'sms-settings',
             array($this, 'display_settings_page')
         );
+
+        // Role Tester submenu (for administrators only)
+        if (current_user_can('manage_options') && class_exists('SMS_Role_Tester')) {
+            add_submenu_page(
+                'school-management',
+                __('Role Tester', 'school-management-system'),
+                __('Role Tester', 'school-management-system'),
+                'manage_options',
+                'sms-role-tester',
+                array($this, 'display_role_tester_page')
+            );
+        }
     }
 
     /**
@@ -269,21 +271,42 @@ class SMS_Admin extends SMS_Base {
     }
 
     /**
-     * Display dashboard page.
+     * Redirect to appropriate dashboard based on user role.
      */
-    public function display_dashboard() {
-        if (!$this->check_capability('manage_students')) {
-            wp_die(__('You do not have sufficient permissions to access this page.'));
+    public function redirect_to_appropriate_dashboard() {
+        $current_user = wp_get_current_user();
+        $user_roles = $current_user->roles;
+        
+        // Redirect based on user role
+        if (in_array('sms_teacher', $user_roles)) {
+            wp_redirect(admin_url('admin.php?page=sms-teacher-dashboard'));
+            exit;
+        } elseif (in_array('sms_parent', $user_roles)) {
+            wp_redirect(admin_url('admin.php?page=sms-parent-dashboard'));
+            exit;
+        } elseif (in_array('sms_student', $user_roles)) {
+            wp_redirect(admin_url('admin.php?page=sms-student-dashboard'));
+            exit;
+        } elseif (in_array('administrator', $user_roles) || in_array('sms_admin', $user_roles)) {
+            wp_redirect(admin_url('admin.php?page=sms-admin-dashboard'));
+            exit;
         }
         
-        include SMS_PLUGIN_DIR . 'admin/partials/dashboard.php';
+        // Fallback: show message for users without specific roles
+        echo '<div class="wrap">';
+        echo '<h1>' . __('School Management System', 'school-management-system') . '</h1>';
+        echo '<div class="notice notice-info">';
+        echo '<p>' . __('Please contact your administrator to assign you an appropriate role to access the dashboard.', 'school-management-system') . '</p>';
+        echo '</div>';
+        echo '</div>';
     }
 
     /**
      * Display students page.
      */
     public function display_students_page() {
-        if (!$this->check_capability('manage_students')) {
+        // Allow both admin capabilities and teacher capabilities
+        if (!$this->check_capability('manage_students') && !$this->check_capability('view_student_records')) {
             wp_die(__('You do not have sufficient permissions to access this page.'));
         }
         
@@ -294,7 +317,8 @@ class SMS_Admin extends SMS_Base {
      * Display classes page.
      */
     public function display_classes_page() {
-        if (!$this->check_capability('manage_classes')) {
+        // Allow both admin capabilities and teacher capabilities
+        if (!$this->check_capability('manage_classes') && !$this->check_capability('edit_assigned_classes')) {
             wp_die(__('You do not have sufficient permissions to access this page.'));
         }
         
@@ -371,6 +395,22 @@ class SMS_Admin extends SMS_Base {
         }
         
         include SMS_PLUGIN_DIR . 'admin/partials/settings.php';
+    }
+
+    /**
+     * Display role tester page.
+     */
+    public function display_role_tester_page() {
+        if (!current_user_can('manage_options')) {
+            wp_die(__('You do not have sufficient permissions to access this page.'));
+        }
+        
+        if (class_exists('SMS_Role_Tester')) {
+            $role_tester = new SMS_Role_Tester();
+            $role_tester->display_role_tester_page();
+        } else {
+            echo '<div class="wrap"><h1>Role Tester</h1><p>Role Tester class not found.</p></div>';
+        }
     }
 
     /**

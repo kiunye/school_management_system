@@ -77,6 +77,7 @@ class SMS_Loader {
         require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-base.php';
         require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-security.php';
         require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-logger.php';
+        require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-database-setup.php';
         require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-communication-handler.php';
         
         // Financial management and payment gateways (load in dependency order)
@@ -103,6 +104,9 @@ class SMS_Loader {
 
         // Admin functionality (load after financial classes)
         require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-admin.php';
+        require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-dashboard-manager.php';
+        require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-dashboard-redirects.php';
+        require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-role-tester.php';
         require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-student-admission-form.php';
         require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-attendance-manager.php';
         require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-attendance-reports.php';
@@ -229,6 +233,31 @@ class SMS_Loader {
         // Initialize attendance notifications
         if (class_exists('SMS_Attendance_Notifications')) {
             new SMS_Attendance_Notifications();
+        }
+        
+        // Initialize dashboard manager
+        if (class_exists('SMS_Dashboard_Manager')) {
+            SMS_Dashboard_Manager::get_instance();
+        }
+        
+        // Initialize dashboard redirects
+        if (class_exists('SMS_Dashboard_Redirects')) {
+            new SMS_Dashboard_Redirects();
+        }
+        
+        // Initialize user roles
+        if (class_exists('SMS_User_Roles')) {
+            new SMS_User_Roles();
+        }
+        
+        // Initialize role tester (admin only)
+        if (class_exists('SMS_Role_Tester') && is_admin()) {
+            new SMS_Role_Tester();
+        }
+        
+        // Initialize database setup
+        if (class_exists('SMS_Database_Setup')) {
+            new SMS_Database_Setup();
         }
     }
 

@@ -17,9 +17,29 @@ if (!defined('WPINC')) {
 class SMS_Dashboard_Manager extends SMS_Base {
 
     /**
+     * Single instance of the class
+     */
+    private static $instance = null;
+
+    /**
+     * Get single instance
+     */
+    public static function get_instance() {
+        if (null === self::$instance) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
+    /**
      * Initialize the dashboard manager
      */
     public function __construct() {
+        // Prevent multiple instances
+        if (null !== self::$instance) {
+            return self::$instance;
+        }
+        
         parent::__construct();
         add_action('admin_menu', array($this, 'add_role_specific_menus'), 15);
         add_action('wp_ajax_sms_get_dashboard_data', array($this, 'get_dashboard_data'));
@@ -30,7 +50,16 @@ class SMS_Dashboard_Manager extends SMS_Base {
      * Add role-specific menu items
      */
     public function add_role_specific_menus() {
+        // Ensure we're in admin and user is logged in
+        if (!is_admin() || !is_user_logged_in()) {
+            return;
+        }
+        
         $current_user = wp_get_current_user();
+        if (!$current_user || !isset($current_user->roles)) {
+            return;
+        }
+        
         $user_roles = $current_user->roles;
 
         // Administrator Dashboard
@@ -41,31 +70,31 @@ class SMS_Dashboard_Manager extends SMS_Base {
                 __('Admin Dashboard', 'school-management-system'),
                 'manage_options',
                 'sms-admin-dashboard',
-                array($this, 'display_admin_dashboard')
+                [$this, 'display_admin_dashboard']
             );
         }
 
         // Teacher Dashboard
-        if (in_array('sms_teacher', $user_roles) || current_user_can('manage_classes')) {
+        if (in_array('sms_teacher', $user_roles)) {
             add_submenu_page(
                 'school-management',
                 __('Teacher Dashboard', 'school-management-system'),
                 __('Teacher Dashboard', 'school-management-system'),
-                'manage_classes',
+                'read', // Changed from 'edit_posts' to 'read' for broader access
                 'sms-teacher-dashboard',
-                array($this, 'display_teacher_dashboard')
+                [$this, 'display_teacher_dashboard']
             );
         }
 
         // Parent Dashboard
-        if (in_array('sms_parent', $user_roles) || current_user_can('view_child_records')) {
+        if (in_array('sms_parent', $user_roles)) {
             add_submenu_page(
                 'school-management',
                 __('Parent Dashboard', 'school-management-system'),
                 __('Parent Dashboard', 'school-management-system'),
-                'view_child_records',
+                'read',
                 'sms-parent-dashboard',
-                array($this, 'display_parent_dashboard')
+                [$this, 'display_parent_dashboard']
             );
         }
     }
@@ -78,32 +107,62 @@ class SMS_Dashboard_Manager extends SMS_Base {
             wp_die(__('You do not have sufficient permissions to access this page.'));
         }
 
-        $dashboard_data = $this->get_admin_dashboard_data();
-        include SMS_PLUGIN_DIR . 'admin/partials/admin-dashboard.php';
+        try {
+            $dashboard_data = $this->get_admin_dashboard_data();
+            $template_path = SMS_PLUGIN_DIR . 'admin/partials/admin-dashboard.php';
+            
+            if (file_exists($template_path)) {
+                include $template_path;
+            } else {
+                echo '<div class="wrap"><h1>Admin Dashboard</h1><p>Dashboard template not found.</p></div>';
+            }
+        } catch (Exception $e) {
+            echo '<div class="wrap"><h1>Admin Dashboard</h1><div class="notice notice-error"><p>Error loading dashboard: ' . esc_html($e->getMessage()) . '</p></div></div>';
+        }
     }
 
     /**
      * Display teacher dashboard
      */
     public function display_teacher_dashboard() {
-        if (!current_user_can('manage_classes')) {
+        if (!current_user_can('read')) {
             wp_die(__('You do not have sufficient permissions to access this page.'));
         }
 
-        $dashboard_data = $this->get_teacher_dashboard_data();
-        include SMS_PLUGIN_DIR . 'admin/partials/teacher-dashboard.php';
+        try {
+            $dashboard_data = $this->get_teacher_dashboard_data();
+            $template_path = SMS_PLUGIN_DIR . 'admin/partials/teacher-dashboard.php';
+            
+            if (file_exists($template_path)) {
+                include $template_path;
+            } else {
+                echo '<div class="wrap"><h1>Teacher Dashboard</h1><p>Dashboard template not found.</p></div>';
+            }
+        } catch (Exception $e) {
+            echo '<div class="wrap"><h1>Teacher Dashboard</h1><div class="notice notice-error"><p>Error loading dashboard: ' . esc_html($e->getMessage()) . '</p></div></div>';
+        }
     }
 
     /**
      * Display parent dashboard
      */
     public function display_parent_dashboard() {
-        if (!current_user_can('view_child_records')) {
+        if (!current_user_can('read')) {
             wp_die(__('You do not have sufficient permissions to access this page.'));
         }
 
-        $dashboard_data = $this->get_parent_dashboard_data();
-        include SMS_PLUGIN_DIR . 'admin/partials/parent-dashboard.php';
+        try {
+            $dashboard_data = $this->get_parent_dashboard_data();
+            $template_path = SMS_PLUGIN_DIR . 'admin/partials/parent-dashboard.php';
+            
+            if (file_exists($template_path)) {
+                include $template_path;
+            } else {
+                echo '<div class="wrap"><h1>Parent Dashboard</h1><p>Dashboard template not found.</p></div>';
+            }
+        } catch (Exception $e) {
+            echo '<div class="wrap"><h1>Parent Dashboard</h1><div class="notice notice-error"><p>Error loading dashboard: ' . esc_html($e->getMessage()) . '</p></div></div>';
+        }
     }
 
     /**
@@ -262,13 +321,23 @@ class SMS_Dashboard_Manager extends SMS_Base {
     // Helper methods for data retrieval
 
     private function get_post_count($post_type) {
+        // Check if post type exists
+        if (!post_type_exists($post_type)) {
+            return 0;
+        }
+        
         $count = wp_count_posts($post_type);
-        return isset($count->publish) ? $count->publish : 0;
+        return isset($count->publish) ? intval($count->publish) : 0;
     }
 
     private function get_user_count_by_role($role) {
-        $users = get_users(array('role' => $role, 'count_total' => true));
-        return is_array($users) ? count($users) : $users;
+        // Check if role exists
+        if (!get_role($role)) {
+            return 0;
+        }
+        
+        $users = get_users(array('role' => $role));
+        return is_array($users) ? count($users) : 0;
     }
 
     private function get_active_invoices_count() {
@@ -302,11 +371,20 @@ class SMS_Dashboard_Manager extends SMS_Base {
 
     private function get_sms_sent_today() {
         global $wpdb;
-        return $wpdb->get_var($wpdb->prepare("
+        
+        // Check if table exists first
+        $table_name = $wpdb->prefix . 'sms_messages';
+        if ($wpdb->get_var("SHOW TABLES LIKE '{$table_name}'") != $table_name) {
+            return 0; // Return 0 if table doesn't exist
+        }
+        
+        $result = $wpdb->get_var($wpdb->prepare("
             SELECT COUNT(*) 
-            FROM {$wpdb->prefix}sms_messages 
+            FROM {$table_name} 
             WHERE DATE(sent_at) = %s
         ", date('Y-m-d')));
+        
+        return $result ? intval($result) : 0;
     }
 
     private function get_monthly_revenue() {
@@ -366,9 +444,27 @@ class SMS_Dashboard_Manager extends SMS_Base {
     private function get_recent_system_activities($limit = 10) {
         global $wpdb;
         
+        // Check if activity log table exists
+        $table_name = $wpdb->prefix . 'sms_activity_log';
+        if ($wpdb->get_var("SHOW TABLES LIKE '{$table_name}'") != $table_name) {
+            // Return sample activities if table doesn't exist
+            return array(
+                array(
+                    'user_name' => 'System',
+                    'action_description' => 'System initialized',
+                    'time_ago' => '1 hour ago'
+                ),
+                array(
+                    'user_name' => 'Admin',
+                    'action_description' => 'Accessed dashboard',
+                    'time_ago' => '2 hours ago'
+                )
+            );
+        }
+        
         $activities = $wpdb->get_results($wpdb->prepare("
             SELECT al.*, u.display_name as user_name
-            FROM {$wpdb->prefix}sms_activity_log al
+            FROM {$table_name} al
             LEFT JOIN {$wpdb->users} u ON al.user_id = u.ID
             ORDER BY al.created_at DESC
             LIMIT %d

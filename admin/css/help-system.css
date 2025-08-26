@@ -1,0 +1,441 @@
+/**
+ * Help System Styles
+ *
+ * Styles for tooltips, help modals, and guided tours.
+ */
+
+/* Tooltip Styles */
+.sms-tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: help;
+    margin-left: 5px;
+}
+
+.sms-tooltip .dashicons {
+    font-size: 16px;
+    color: #666;
+    vertical-align: middle;
+}
+
+.sms-tooltip:hover .dashicons {
+    color: #0073aa;
+}
+
+.sms-tooltip::before,
+.sms-tooltip::after {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+}
+
+.sms-tooltip::before {
+    content: attr(data-tooltip);
+    background: #333;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 1.4;
+    white-space: nowrap;
+    max-width: 300px;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.sms-tooltip::after {
+    content: '';
+    width: 0;
+    height: 0;
+    border: 5px solid transparent;
+}
+
+/* Tooltip positioning */
+.sms-tooltip[data-position="top"]::before {
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 5px;
+}
+
+.sms-tooltip[data-position="top"]::after {
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-top-color: #333;
+}
+
+.sms-tooltip[data-position="bottom"]::before {
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 5px;
+}
+
+.sms-tooltip[data-position="bottom"]::after {
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-bottom-color: #333;
+}
+
+.sms-tooltip[data-position="left"]::before {
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-right: 5px;
+}
+
+.sms-tooltip[data-position="left"]::after {
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border-left-color: #333;
+}
+
+.sms-tooltip[data-position="right"]::before {
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 5px;
+}
+
+.sms-tooltip[data-position="right"]::after {
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border-right-color: #333;
+}
+
+.sms-tooltip:hover::before,
+.sms-tooltip:hover::after {
+    opacity: 1;
+}
+
+/* Help Modal Styles */
+.sms-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sms-modal-content {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.sms-modal-header {
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f9f9f9;
+}
+
+.sms-modal-header h2 {
+    margin: 0;
+    color: #333;
+    font-size: 18px;
+}
+
+.sms-modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.sms-modal-close:hover {
+    background: #f0f0f0;
+    color: #333;
+}
+
+.sms-modal-body {
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.sms-modal-body h4 {
+    margin: 20px 0 10px 0;
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.sms-modal-body ol,
+.sms-modal-body ul {
+    margin: 0 0 15px 0;
+    padding-left: 20px;
+}
+
+.sms-modal-body li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.sms-modal-footer {
+    padding: 15px 20px;
+    border-top: 1px solid #ddd;
+    background: #f9f9f9;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* Tour Modal Specific Styles */
+.sms-tour-modal .sms-modal-content {
+    max-width: 500px;
+}
+
+.sms-tour-progress {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.sms-tour-progress-bar {
+    background: #f0f0f0;
+    height: 4px;
+    border-radius: 2px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.sms-tour-progress-fill {
+    background: #0073aa;
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+#sms-tour-step-counter {
+    font-size: 12px;
+    color: #666;
+}
+
+/* Help Button Styles */
+.sms-help-trigger,
+.sms-tour-trigger {
+    margin-left: 10px;
+}
+
+.sms-help-trigger .dashicons,
+.sms-tour-trigger .dashicons {
+    font-size: 16px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+/* Field Help Integration */
+.form-table .sms-tooltip {
+    margin-left: 10px;
+}
+
+.form-field .sms-tooltip {
+    margin-left: 5px;
+}
+
+/* Help Section in Screen Options */
+.screen-meta .sms-help-trigger {
+    margin-left: 0;
+    margin-right: 10px;
+}
+
+/* Tour Highlight Styles */
+.sms-tour-highlight {
+    position: relative;
+    z-index: 99999;
+    box-shadow: 0 0 0 4px rgba(0, 115, 170, 0.3);
+    border-radius: 4px;
+}
+
+.sms-tour-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 99998;
+    pointer-events: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sms-modal-content {
+        width: 95%;
+        max-height: 90vh;
+    }
+    
+    .sms-modal-header,
+    .sms-modal-body,
+    .sms-modal-footer {
+        padding: 15px;
+    }
+    
+    .sms-tooltip::before {
+        max-width: 200px;
+        font-size: 11px;
+    }
+    
+    .sms-modal-footer {
+        flex-direction: column;
+    }
+    
+    .sms-modal-footer .button {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+}
+
+/* Loading States */
+.sms-help-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    color: #666;
+}
+
+.sms-help-loading::before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #0073aa;
+    border-radius: 50%;
+    animation: sms-spin 1s linear infinite;
+    margin-right: 10px;
+}
+
+@keyframes sms-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Error States */
+.sms-help-error {
+    padding: 20px;
+    text-align: center;
+    color: #d63638;
+}
+
+.sms-help-error .dashicons {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+/* Success States */
+.sms-help-success {
+    padding: 20px;
+    text-align: center;
+    color: #00a32a;
+}
+
+.sms-help-success .dashicons {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+/* Help Content Formatting */
+.sms-help-content h3 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 16px;
+}
+
+.sms-help-content p {
+    margin: 0 0 15px 0;
+    line-height: 1.6;
+    color: #555;
+}
+
+.sms-help-content code {
+    background: #f1f1f1;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: monospace;
+    font-size: 13px;
+}
+
+.sms-help-content .highlight {
+    background: #fff3cd;
+    padding: 10px;
+    border-left: 4px solid #ffc107;
+    margin: 15px 0;
+}
+
+.sms-help-content .warning {
+    background: #f8d7da;
+    padding: 10px;
+    border-left: 4px solid #dc3545;
+    margin: 15px 0;
+}
+
+.sms-help-content .info {
+    background: #d1ecf1;
+    padding: 10px;
+    border-left: 4px solid #17a2b8;
+    margin: 15px 0;
+}
+
+/* Animation for modal appearance */
+.sms-modal {
+    animation: sms-modal-fade-in 0.3s ease;
+}
+
+.sms-modal-content {
+    animation: sms-modal-slide-in 0.3s ease;
+}
+
+@keyframes sms-modal-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes sms-modal-slide-in {
+    from { 
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Print styles */
+@media print {
+    .sms-modal,
+    .sms-tooltip,
+    .sms-help-trigger,
+    .sms-tour-trigger {
+        display: none !important;
+    }
+}

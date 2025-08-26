@@ -10,6 +10,12 @@
 if (!defined('WPINC')) {
     die;
 }
+
+// Prevent duplicate rendering
+if (defined('SMS_MAIN_DASHBOARD_RENDERED')) {
+    return;
+}
+define('SMS_MAIN_DASHBOARD_RENDERED', true);
 ?>
 
 <div class="wrap">
