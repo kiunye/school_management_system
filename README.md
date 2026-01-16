@@ -2,47 +2,47 @@
 
 A comprehensive WordPress-based School Management System designed to streamline administrative tasks, enhance communication between stakeholders, and provide robust financial and academic management capabilities.
 
-## 🎯 Features
+##  Features
 
-### 📚 Academic Management
+###  Academic Management
 - **Student Management**: Complete student lifecycle from admission to graduation
 - **Class Management**: Dynamic class creation with capacity management
 - **Attendance Tracking**: Real-time attendance marking with parent notifications
 - **Timetable Management**: Drag-and-drop timetable builder with conflict detection
 - **Grade Management**: Comprehensive grading and progress tracking
 
-### 💰 Financial Management
+###  Financial Management
 - **Fee Structure Management**: Flexible fee types with installment options
 - **Multi-Gateway Payments**: M-Pesa, Airtel Money, and bank transfer integration
 - **Invoice Generation**: Automated invoice creation and management
 - **Payment Tracking**: Real-time payment status and history
 - **Financial Reporting**: Comprehensive financial analytics
 
-### 📱 Communication System
+###  Communication System
 - **SMS Integration**: Bulk SMS via Africastalking API
 - **Notice Board**: Targeted announcements with file attachments
 - **Parent Notifications**: Automated alerts for attendance and payments
 - **Multi-channel Communication**: SMS, email, and in-app messaging
 
-### 🚌 Transport Management
+###  Transport Management
 - **Route Management**: Transport route creation with stops and timing
 - **Student Assignment**: Capacity-aware student-route assignments
 - **Driver Management**: Driver information and vehicle tracking
 - **Transport Fees**: Automated transport fee calculation
 
-### 📊 Reports & Analytics
+###  Reports & Analytics
 - **Financial Reports**: Income, expense, and cash flow analysis
 - **Academic Reports**: Attendance, performance, and enrollment statistics
 - **Export Options**: PDF, Excel, and CSV export formats
 - **Real-time Dashboards**: Role-based dashboard views
 
-### 👥 User Management
+###  User Management
 - **Role-based Access**: Administrator, Teacher, Parent, and Student roles
 - **Custom Permissions**: Granular capability management
 - **Automated Account Creation**: Parent accounts created during student enrollment
 - **Secure Authentication**: WordPress-native security with custom enhancements
 
-## 🛠 Technical Specifications
+##  Technical Specifications
 
 ### Requirements
 - **WordPress**: 6.0 or higher
@@ -63,7 +63,7 @@ A comprehensive WordPress-based School Management System designed to streamline 
 - **Airtel Money API**: Alternative mobile payment option
 - **WordPress SMTP**: Email communication
 
-## 🚀 Installation
+##  Installation
 
 ### Prerequisites
 1. WordPress 6.0+ installation
@@ -72,41 +72,7 @@ A comprehensive WordPress-based School Management System designed to streamline 
 4. Advanced Custom Fields Pro plugin
 5. User Role Editor plugin
 
-### Installation Steps
-
-1. **Download and Upload**
-   ```bash
-   # Upload plugin to WordPress plugins directory
-   wp plugin install school-management-system.zip
-   ```
-
-2. **Activate Dependencies**
-   ```bash
-   wp plugin activate advanced-custom-fields-pro
-   wp plugin activate user-role-editor
-   ```
-
-3. **Activate Main Plugin**
-   ```bash
-   wp plugin activate school-management-system
-   ```
-
-4. **Run Setup Wizard**
-   - Navigate to SMS Settings in WordPress admin
-   - Complete the initial setup wizard
-   - Configure school information and academic year
-
-5. **Import Field Groups**
-   ```bash
-   wp acf sync
-   ```
-
-6. **Flush Permalinks**
-   ```bash
-   wp rewrite flush
-   ```
-
-## ⚙️ Configuration
+##  Configuration
 
 ### Initial Setup
 1. **School Information**: Configure basic school details
@@ -159,7 +125,7 @@ $sms_config = [
 3. **Communication**: Receive notifications and communicate with teachers
 4. **School Updates**: Access school notices and announcements
 
-## 🔧 Development
+## Development
 
 ### Development Setup
 ```bash
