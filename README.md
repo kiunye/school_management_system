@@ -164,7 +164,7 @@ vendor/bin/phpstan analyse src/
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📚 Documentation
+##  Documentation
 
 ### User Manuals
 - [Administrator Manual](docs/admin-user-manual.md) - Complete guide for school administrators
@@ -181,7 +181,7 @@ vendor/bin/phpstan analyse src/
 - [Configuration Guide](docs/configuration-guide.md) - System configuration reference
 - [Troubleshooting Guide](docs/troubleshooting-guide.md) - Common issues and solutions
 
-## 🔒 Security
+##  Security
 
 ### Security Features
 - **Input Sanitization**: All user inputs sanitized using WordPress functions
@@ -196,7 +196,7 @@ vendor/bin/phpstan analyse src/
 - **Transaction Logging**: Comprehensive audit trail for all transactions
 - **PCI Compliance**: No sensitive payment data stored locally
 
-## 🚀 Performance
+##  Performance
 
 ### Optimization Features
 - **Database Indexing**: Optimized indexes for frequently queried fields
@@ -211,7 +211,7 @@ vendor/bin/phpstan analyse src/
 - **Memory Usage**: < 256MB per request
 - **API Response Time**: < 2 seconds
 
-## 🐛 Troubleshooting
+##  Troubleshooting
 
 ### Common Issues
 
@@ -242,32 +242,18 @@ define('WP_DEBUG_LOG', true);
 define('WP_DEBUG_DISPLAY', false);
 ```
 
-## 📞 Support
-
-### Getting Help
-- **Documentation**: Comprehensive user and technical documentation
-- **Community Forum**: Connect with other users and developers
-- **GitHub Issues**: Report bugs and request features
-- **Email Support**: Direct support for urgent issues
-
-### Support Channels
-- **Email**: support@schoolmanagementsystem.com
-- **Documentation**: https://docs.schoolmanagementsystem.com
-- **GitHub**: https://github.com/school-management-system/issues
-- **Community**: https://community.schoolmanagementsystem.com
-
-## 📄 License
+##  License
 
 This project is licensed under the GPL v2 or later - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - **WordPress Community**: For the excellent platform and ecosystem
 - **Africastalking**: For reliable SMS API services
 - **Safaricom**: For M-Pesa payment gateway integration
 - **Contributors**: All developers who have contributed to this project
 
-## 🗺 Roadmap
+##  Roadmap
 
 ### Version 2.0 (Planned)
 - [ ] Mobile application for iOS and Android
@@ -283,7 +269,7 @@ This project is licensed under the GPL v2 or later - see the [LICENSE](LICENSE) 
 - [ ] Advanced parent-teacher communication tools
 - [ ] Inventory management system
 
-## 📊 Statistics
+##  Statistics
 
 - **Lines of Code**: 50,000+
 - **Test Coverage**: 85%+
@@ -291,7 +277,7 @@ This project is licensed under the GPL v2 or later - see the [LICENSE](LICENSE) 
 - **Active Installations**: 100+ schools
 - **Countries**: Kenya, Uganda, Tanzania
 
-## 🌟 Features in Detail
+##  Features in Detail
 
 ### Student Management
 - Comprehensive student profiles with photos
@@ -330,7 +316,3 @@ This project is licensed under the GPL v2 or later - see the [LICENSE](LICENSE) 
 - Academic calendar integration
 
 ---
-
-**Made with ❤️ for schools in Kenya and beyond**
-
-For more information, visit our [website](https://schoolmanagementsystem.com) or check out our [documentation](https://docs.schoolmanagementsystem.com).
