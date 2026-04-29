@@ -457,6 +457,10 @@ class SMS_Admin extends SMS_Base {
      * Check for required plugins.
      */
     private function check_required_plugins() {
+        if (!function_exists('is_plugin_active')) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+
         $required_plugins = array(
             'advanced-custom-fields-pro/acf.php' => 'Advanced Custom Fields Pro',
             'user-role-editor/user-role-editor.php' => 'User Role Editor'

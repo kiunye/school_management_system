@@ -32,6 +32,21 @@ if (isset($_POST['action'])) {
         case 'import_students':
             check_admin_referer('sms_import_students');
             if (isset($_FILES['import_file']) && $_FILES['import_file']['error'] === UPLOAD_ERR_OK) {
+                $file_check = wp_check_filetype_and_ext(
+                    $_FILES['import_file']['tmp_name'],
+                    $_FILES['import_file']['name'],
+                    [
+                        'csv' => 'text/csv',
+                        'json' => 'application/json',
+                        'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    ]
+                );
+                if (empty($file_check['ext'])) {
+                    $message = 'Invalid file type. Please upload CSV, JSON, or XLSX.';
+                    $message_type = 'error';
+                    break;
+                }
+
                 $upload_result = wp_handle_upload($_FILES['import_file'], ['test_form' => false]);
                 if (!isset($upload_result['error'])) {
                     $mapping = [];
@@ -53,12 +68,30 @@ if (isset($_POST['action'])) {
                     $message = 'File upload failed: ' . $upload_result['error'];
                     $message_type = 'error';
                 }
+            } else {
+                $message = 'Please select a valid import file.';
+                $message_type = 'error';
             }
             break;
 
         case 'import_academic':
             check_admin_referer('sms_import_academic');
             if (isset($_FILES['import_file']) && $_FILES['import_file']['error'] === UPLOAD_ERR_OK) {
+                $file_check = wp_check_filetype_and_ext(
+                    $_FILES['import_file']['tmp_name'],
+                    $_FILES['import_file']['name'],
+                    [
+                        'csv' => 'text/csv',
+                        'json' => 'application/json',
+                        'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    ]
+                );
+                if (empty($file_check['ext'])) {
+                    $message = 'Invalid file type. Please upload CSV, JSON, or XLSX.';
+                    $message_type = 'error';
+                    break;
+                }
+
                 $upload_result = wp_handle_upload($_FILES['import_file'], ['test_form' => false]);
                 if (!isset($upload_result['error'])) {
                     $data_type = sanitize_key(wp_unslash($_POST['academic_type'] ?? ''));
@@ -75,6 +108,9 @@ if (isset($_POST['action'])) {
                     $message = 'File upload failed: ' . $upload_result['error'];
                     $message_type = 'error';
                 }
+            } else {
+                $message = 'Please select a valid import file.';
+                $message_type = 'error';
             }
             break;
 

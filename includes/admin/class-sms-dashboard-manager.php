@@ -330,22 +330,36 @@ class SMS_Dashboard_Manager extends SMS_Base {
     public function get_dashboard_data() {
         check_ajax_referer('sms_admin_nonce', 'nonce');
 
-        $dashboard_type = sanitize_text_field($_POST['dashboard_type']);
+        $dashboard_type = sanitize_key(wp_unslash($_POST['dashboard_type'] ?? ''));
         $data = array();
 
         switch ($dashboard_type) {
             case 'admin':
+                if (!current_user_can('manage_options') && !current_user_can('manage_system_settings')) {
+                    wp_send_json_error(array('message' => __('Insufficient permissions.', 'school-management-system')), 403);
+                }
                 $data = $this->get_admin_dashboard_data();
                 break;
             case 'teacher':
+                if (!current_user_can('read')) {
+                    wp_send_json_error(array('message' => __('Insufficient permissions.', 'school-management-system')), 403);
+                }
                 $data = $this->get_teacher_dashboard_data();
                 break;
             case 'parent':
+                if (!current_user_can('read')) {
+                    wp_send_json_error(array('message' => __('Insufficient permissions.', 'school-management-system')), 403);
+                }
                 $data = $this->get_parent_dashboard_data();
                 break;
             case 'student':
+                if (!current_user_can('read')) {
+                    wp_send_json_error(array('message' => __('Insufficient permissions.', 'school-management-system')), 403);
+                }
                 $data = $this->get_student_dashboard_data();
                 break;
+            default:
+                wp_send_json_error(array('message' => __('Invalid dashboard type.', 'school-management-system')), 400);
         }
 
         wp_send_json_success($data);
@@ -356,6 +370,10 @@ class SMS_Dashboard_Manager extends SMS_Base {
      */
     public function get_recent_activity() {
         check_ajax_referer('sms_admin_nonce', 'nonce');
+
+        if (!current_user_can('manage_options') && !current_user_can('manage_system_settings')) {
+            wp_send_json_error(array('message' => __('Insufficient permissions.', 'school-management-system')), 403);
+        }
 
         $activities = $this->get_recent_system_activities(10);
         $html = '';

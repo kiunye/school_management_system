@@ -53,56 +53,6 @@ class SMS_Activator {
             $db_setup = new SMS_Database_Setup();
             $db_setup->create_tables();
         }
-
-        // Load database setup class
-        require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-database-setup.php';
-        
-        if (class_exists('SMS_Database_Setup')) {
-            $db_setup = new SMS_Database_Setup();
-            $db_setup->create_tables();
-        }
-
-        $charset_collate = $wpdb->get_charset_collate();
-
-        // Activity log table
-        $activity_log_table = $wpdb->prefix . 'sms_activity_log';
-        $activity_log_sql = "CREATE TABLE $activity_log_table (
-            id bigint(20) NOT NULL AUTO_INCREMENT,
-            user_id bigint(20) NOT NULL,
-            action varchar(100) NOT NULL,
-            object_type varchar(50) NOT NULL,
-            object_id bigint(20) NOT NULL,
-            details longtext,
-            ip_address varchar(45),
-            timestamp datetime DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY (id),
-            KEY user_id (user_id),
-            KEY action (action),
-            KEY object_type (object_type),
-            KEY timestamp (timestamp)
-        ) $charset_collate;";
-
-        // SMS queue table
-        $sms_queue_table = $wpdb->prefix . 'sms_message_queue';
-        $sms_queue_sql = "CREATE TABLE $sms_queue_table (
-            id bigint(20) NOT NULL AUTO_INCREMENT,
-            recipients longtext NOT NULL,
-            message text NOT NULL,
-            priority varchar(20) DEFAULT 'normal',
-            status varchar(20) DEFAULT 'pending',
-            gateway_response longtext,
-            attempts int(11) DEFAULT 0,
-            created_at datetime DEFAULT CURRENT_TIMESTAMP,
-            sent_at datetime NULL,
-            PRIMARY KEY (id),
-            KEY status (status),
-            KEY priority (priority),
-            KEY created_at (created_at)
-        ) $charset_collate;";
-
-        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-        dbDelta($activity_log_sql);
-        dbDelta($sms_queue_sql);
     }
 
     /**
@@ -134,70 +84,11 @@ class SMS_Activator {
      * Create custom user roles and capabilities.
      */
     private static function create_user_roles() {
-        // SMS Administrator role
-        add_role('sms_admin', 'School Administrator', array(
-            'read' => true,
-            'manage_students' => true,
-            'manage_classes' => true,
-            'manage_fees' => true,
-            'manage_financial_reports' => true,
-            'send_bulk_sms' => true,
-            'manage_system_settings' => true,
-            'manage_transport' => true,
-            'manage_notices' => true,
-            'view_all_reports' => true,
-            'manage_users' => true,
-            'edit_posts' => true,
-            'edit_others_posts' => true,
-            'publish_posts' => true,
-            'manage_categories' => true
-        ));
+        require_once SMS_PLUGIN_DIR . 'includes/user-roles/class-sms-user-roles.php';
 
-        // Teacher role
-        add_role('sms_teacher', 'Teacher', array(
-            'read' => true,
-            'edit_assigned_classes' => true,
-            'mark_attendance' => true,
-            'create_lessons' => true,
-            'view_student_records' => true,
-            'create_academic_notices' => true,
-            'view_class_reports' => true,
-            'edit_posts' => true,
-            'publish_posts' => true
-        ));
-
-        // Parent role
-        add_role('sms_parent', 'Parent', array(
-            'read' => true,
-            'view_child_records' => true,
-            'view_child_fees' => true,
-            'make_payments' => true,
-            'update_contact_info' => true,
-            'view_child_attendance' => true,
-            'view_notices' => true
-        ));
-
-        // Student role
-        add_role('sms_student', 'Student', array(
-            'read' => true,
-            'view_own_records' => true,
-            'view_timetable' => true,
-            'view_notices' => true,
-            'view_assignments' => true
-        ));
-
-        // Add capabilities to administrator
-        $admin_role = get_role('administrator');
-        if ($admin_role) {
-            $admin_capabilities = array(
-                'manage_students', 'manage_classes', 'manage_fees',
-                'manage_financial_reports', 'send_bulk_sms', 'manage_system_settings',
-                'manage_transport', 'manage_notices', 'view_all_reports'
-            );
-            
-            foreach ($admin_capabilities as $cap) {
-                $admin_role->add_cap($cap);
-            }
+        if (class_exists('SMS_User_Roles')) {
+            $roles_manager = new SMS_User_Roles();
+            $roles_manager->update_user_roles();
         }
     }
 }
