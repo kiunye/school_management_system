@@ -18,17 +18,28 @@ $data_migrator = new SMS_Data_Migrator();
 $data_validator = new SMS_Data_Validator();
 $backup_manager = new SMS_Backup_Manager();
 
+if (!current_user_can('manage_options') && !current_user_can('manage_system_settings')) {
+    wp_die(__('You do not have sufficient permissions to access this page.', 'school-management-system'));
+}
 // Handle form submissions
 $message = '';
 $message_type = '';
 
 if (isset($_POST['action'])) {
-    switch ($_POST['action']) {
+    $posted_action = sanitize_key(wp_unslash($_POST['action']));
+
+    switch ($posted_action) {
         case 'import_students':
+            check_admin_referer('sms_import_students');
             if (isset($_FILES['import_file']) && $_FILES['import_file']['error'] === UPLOAD_ERR_OK) {
                 $upload_result = wp_handle_upload($_FILES['import_file'], ['test_form' => false]);
                 if (!isset($upload_result['error'])) {
-                    $mapping = $_POST['field_mapping'] ?? [];
+                    $mapping = [];
+                    if (!empty($_POST['field_mapping']) && is_array($_POST['field_mapping'])) {
+                        foreach (wp_unslash($_POST['field_mapping']) as $system_field => $import_field) {
+                            $mapping[sanitize_key($system_field)] = sanitize_text_field($import_field);
+                        }
+                    }
                     $import_result = $data_migrator->import_students($upload_result['file'], $mapping);
                     
                     if (is_wp_error($import_result)) {
@@ -45,19 +56,56 @@ if (isset($_POST['action'])) {
             }
             break;
 
+        case 'import_academic':
+            check_admin_referer('sms_import_academic');
+            if (isset($_FILES['import_file']) && $_FILES['import_file']['error'] === UPLOAD_ERR_OK) {
+                $upload_result = wp_handle_upload($_FILES['import_file'], ['test_form' => false]);
+                if (!isset($upload_result['error'])) {
+                    $data_type = sanitize_key(wp_unslash($_POST['academic_type'] ?? ''));
+                    $import_result = $data_migrator->import_academic_data($upload_result['file'], $data_type, []);
+
+                    if (is_wp_error($import_result)) {
+                        $message = 'Academic import failed: ' . $import_result->get_error_message();
+                        $message_type = 'error';
+                    } else {
+                        $message = "Academic import completed. Success: {$import_result['success']}, Errors: {$import_result['errors']}";
+                        $message_type = 'success';
+                    }
+                } else {
+                    $message = 'File upload failed: ' . $upload_result['error'];
+                    $message_type = 'error';
+                }
+            }
+            break;
+
         case 'validate_data':
+            check_admin_referer('sms_validate_data');
             $validation_report = $data_validator->run_full_system_validation();
             $message = "Validation completed. Total issues found: {$validation_report['total_issues']}";
             $message_type = $validation_report['total_issues'] > 0 ? 'warning' : 'success';
             break;
 
+        case 'cleanup_data':
+            check_admin_referer('sms_cleanup_data');
+            $cleanup_options = [
+                'remove_orphaned_transactions' => isset($_POST['remove_orphaned_transactions']),
+                'remove_orphaned_attendance' => isset($_POST['remove_orphaned_attendance']),
+                'fix_relationships' => isset($_POST['fix_relationships']),
+                'backup_before_cleanup' => isset($_POST['backup_before_cleanup']),
+            ];
+            $cleanup_result = $data_validator->cleanup_orphaned_data($cleanup_options);
+            $message = "Cleanup completed. Items cleaned: {$cleanup_result['cleaned_items']}";
+            $message_type = 'success';
+            break;
+
         case 'create_backup':
+            check_admin_referer('sms_create_backup');
             $backup_options = [
                 'include_database' => isset($_POST['include_database']),
                 'include_files' => isset($_POST['include_files']),
                 'include_uploads' => isset($_POST['include_uploads']),
                 'compress' => isset($_POST['compress']),
-                'description' => sanitize_text_field($_POST['backup_description'] ?? 'Manual backup')
+                'description' => sanitize_text_field(wp_unslash($_POST['backup_description'] ?? 'Manual backup'))
             ];
             
             $backup_result = $backup_manager->create_full_backup($backup_options);

@@ -63,12 +63,12 @@ class SMS_Dashboard_Manager extends SMS_Base {
         $user_roles = $current_user->roles;
 
         // Administrator Dashboard
-        if (in_array('administrator', $user_roles) || current_user_can('manage_options')) {
+        if (in_array('administrator', $user_roles) || in_array('sms_admin', $user_roles) || current_user_can('manage_options') || current_user_can('manage_system_settings')) {
             add_submenu_page(
                 'school-management',
                 __('Admin Dashboard', 'school-management-system'),
                 __('Admin Dashboard', 'school-management-system'),
-                'manage_options',
+                'manage_system_settings',
                 'sms-admin-dashboard',
                 [$this, 'display_admin_dashboard']
             );
@@ -97,13 +97,25 @@ class SMS_Dashboard_Manager extends SMS_Base {
                 [$this, 'display_parent_dashboard']
             );
         }
+
+        // Student Dashboard
+        if (in_array('sms_student', $user_roles)) {
+            add_submenu_page(
+                'school-management',
+                __('Student Dashboard', 'school-management-system'),
+                __('Student Dashboard', 'school-management-system'),
+                'read',
+                'sms-student-dashboard',
+                [$this, 'display_student_dashboard']
+            );
+        }
     }
 
     /**
      * Display administrator dashboard
      */
     public function display_admin_dashboard() {
-        if (!current_user_can('manage_options')) {
+        if (!current_user_can('manage_options') && !current_user_can('manage_system_settings')) {
             wp_die(__('You do not have sufficient permissions to access this page.'));
         }
 
@@ -166,6 +178,28 @@ class SMS_Dashboard_Manager extends SMS_Base {
     }
 
     /**
+     * Display student dashboard
+     */
+    public function display_student_dashboard() {
+        if (!current_user_can('read')) {
+            wp_die(__('You do not have sufficient permissions to access this page.'));
+        }
+
+        try {
+            $dashboard_data = $this->get_student_dashboard_data();
+            $template_path = SMS_PLUGIN_DIR . 'admin/partials/student-dashboard.php';
+
+            if (file_exists($template_path)) {
+                include $template_path;
+            } else {
+                echo '<div class="wrap"><h1>Student Dashboard</h1><p>Dashboard template not found.</p></div>';
+            }
+        } catch (Exception $e) {
+            echo '<div class="wrap"><h1>Student Dashboard</h1><div class="notice notice-error"><p>Error loading dashboard: ' . esc_html($e->getMessage()) . '</p></div></div>';
+        }
+    }
+
+    /**
      * Get administrator dashboard data
      */
     private function get_admin_dashboard_data() {
@@ -175,10 +209,10 @@ class SMS_Dashboard_Manager extends SMS_Base {
 
         // System overview statistics
         $data['system_stats'] = array(
-            'total_students' => $this->get_post_count('sms_students'),
+            'total_students' => $this->get_post_count('cpt_students'),
             'total_teachers' => $this->get_user_count_by_role('sms_teacher'),
             'total_parents' => $this->get_user_count_by_role('sms_parent'),
-            'total_classes' => $this->get_post_count('sms_classes'),
+            'total_classes' => $this->get_post_count('cpt_classes'),
             'active_invoices' => $this->get_active_invoices_count(),
             'pending_payments' => $this->get_pending_payments_amount(),
             'sms_sent_today' => $this->get_sms_sent_today(),
@@ -267,6 +301,30 @@ class SMS_Dashboard_Manager extends SMS_Base {
     }
 
     /**
+     * Get student dashboard data
+     */
+    private function get_student_dashboard_data() {
+        $current_user_id = get_current_user_id();
+        $student = $this->get_student_by_user_id($current_user_id);
+
+        if (!$student) {
+            return array(
+                'student' => null,
+                'attendance_rate' => 0,
+                'recent_notices' => array(),
+                'upcoming_events' => array()
+            );
+        }
+
+        return array(
+            'student' => $student,
+            'attendance_rate' => $this->get_student_attendance_rate($student->ID, 'this_month'),
+            'recent_notices' => $this->get_student_recent_notices($student->ID, 5),
+            'upcoming_events' => $this->get_student_upcoming_events($student->ID)
+        );
+    }
+
+    /**
      * AJAX handler for dashboard data
      */
     public function get_dashboard_data() {
@@ -284,6 +342,9 @@ class SMS_Dashboard_Manager extends SMS_Base {
                 break;
             case 'parent':
                 $data = $this->get_parent_dashboard_data();
+                break;
+            case 'student':
+                $data = $this->get_student_dashboard_data();
                 break;
         }
 
@@ -345,7 +406,7 @@ class SMS_Dashboard_Manager extends SMS_Base {
         return $wpdb->get_var("
             SELECT COUNT(*) 
             FROM {$wpdb->posts} 
-            WHERE post_type = 'sms_invoices' 
+            WHERE post_type = 'cpt_invoices' 
             AND post_status = 'publish'
         ");
     }
@@ -356,7 +417,7 @@ class SMS_Dashboard_Manager extends SMS_Base {
             SELECT SUM(meta_value) 
             FROM {$wpdb->postmeta} pm
             INNER JOIN {$wpdb->posts} p ON pm.post_id = p.ID
-            WHERE p.post_type = 'sms_invoices'
+            WHERE p.post_type = 'cpt_invoices'
             AND p.post_status = 'publish'
             AND pm.meta_key = 'invoice_amount'
             AND NOT EXISTS (
@@ -393,7 +454,7 @@ class SMS_Dashboard_Manager extends SMS_Base {
             SELECT SUM(pm.meta_value) 
             FROM {$wpdb->postmeta} pm
             INNER JOIN {$wpdb->posts} p ON pm.post_id = p.ID
-            WHERE p.post_type = 'sms_transactions'
+            WHERE p.post_type = 'cpt_transactions'
             AND p.post_status = 'publish'
             AND pm.meta_key = 'transaction_amount'
             AND MONTH(p.post_date) = %d
@@ -411,14 +472,14 @@ class SMS_Dashboard_Manager extends SMS_Base {
         $total = $wpdb->get_var("
             SELECT COUNT(*) 
             FROM {$wpdb->posts} 
-            WHERE post_type = 'sms_transactions'
+            WHERE post_type = 'cpt_transactions'
         ");
         
         $successful = $wpdb->get_var("
             SELECT COUNT(*) 
             FROM {$wpdb->posts} p
             INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
-            WHERE p.post_type = 'sms_transactions'
+            WHERE p.post_type = 'cpt_transactions'
             AND pm.meta_key = 'transaction_status'
             AND pm.meta_value = 'completed'
         ");
@@ -432,7 +493,7 @@ class SMS_Dashboard_Manager extends SMS_Base {
             SELECT pm.meta_value
             FROM {$wpdb->postmeta} pm
             INNER JOIN {$wpdb->posts} p ON pm.post_id = p.ID
-            WHERE p.post_type = 'sms_transactions'
+            WHERE p.post_type = 'cpt_transactions'
             AND pm.meta_key = 'payment_method'
             GROUP BY pm.meta_value
             ORDER BY COUNT(*) DESC
@@ -518,7 +579,7 @@ class SMS_Dashboard_Manager extends SMS_Base {
             SELECT p.post_date
             FROM {$wpdb->posts} p
             INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
-            WHERE p.post_type = 'sms_transactions'
+            WHERE p.post_type = 'cpt_transactions'
             AND pm.meta_key = 'payment_method'
             AND pm.meta_value = %s
             ORDER BY p.post_date DESC
@@ -532,9 +593,9 @@ class SMS_Dashboard_Manager extends SMS_Base {
             SELECT p.*
             FROM {$wpdb->posts} p
             INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
-            WHERE p.post_type = 'sms_classes'
+            WHERE p.post_type = 'cpt_classes'
             AND p.post_status = 'publish'
-            AND pm.meta_key = 'class_teacher'
+            AND pm.meta_key = 'teacher_id'
             AND pm.meta_value = %d
         ", $teacher_id));
     }
@@ -544,7 +605,7 @@ class SMS_Dashboard_Manager extends SMS_Base {
         return $wpdb->get_var($wpdb->prepare("
             SELECT COUNT(*)
             FROM {$wpdb->postmeta}
-            WHERE meta_key = 'student_class'
+            WHERE meta_key = 'current_class'
             AND meta_value = %d
         ", $class_id));
     }
@@ -556,10 +617,10 @@ class SMS_Dashboard_Manager extends SMS_Base {
             FROM {$wpdb->posts} p
             INNER JOIN {$wpdb->postmeta} pm1 ON p.ID = pm1.post_id
             INNER JOIN {$wpdb->postmeta} pm2 ON p.ID = pm2.post_id
-            WHERE p.post_type = 'sms_attendance'
-            AND pm1.meta_key = 'attendance_class'
+            WHERE p.post_type = 'cpt_attendance'
+            AND pm1.meta_key = 'class_id'
             AND pm1.meta_value = %d
-            AND pm2.meta_key = 'attendance_date'
+            AND pm2.meta_key = 'date'
             AND pm2.meta_value = %s
             AND p.post_content LIKE %s
         ", $class_id, date('Y-m-d'), '%"' . $status . '"%'));
@@ -576,8 +637,8 @@ class SMS_Dashboard_Manager extends SMS_Base {
             SELECT p.*, pm.meta_value as schedule_data
             FROM {$wpdb->posts} p
             INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
-            WHERE p.post_type = 'sms_timetables'
-            AND pm.meta_key = 'timetable_teacher'
+            WHERE p.post_type = 'cpt_timetables'
+            AND pm.meta_key = 'teacher_id'
             AND pm.meta_value = %d
         ", $teacher_id));
     }
@@ -588,7 +649,7 @@ class SMS_Dashboard_Manager extends SMS_Base {
             SELECT p.*, pm.meta_value as class_id
             FROM {$wpdb->posts} p
             INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
-            WHERE p.post_type = 'sms_attendance'
+            WHERE p.post_type = 'cpt_attendance'
             AND p.post_author = %d
             ORDER BY p.post_date DESC
             LIMIT %d
@@ -600,13 +661,29 @@ class SMS_Dashboard_Manager extends SMS_Base {
         return array();
     }
 
+    private function get_student_by_user_id($user_id) {
+        $students = get_posts([
+            'post_type' => 'cpt_students',
+            'meta_query' => [
+                [
+                    'key' => 'user_id',
+                    'value' => $user_id,
+                    'compare' => '='
+                ]
+            ],
+            'posts_per_page' => 1
+        ]);
+
+        return !empty($students) ? $students[0] : null;
+    }
+
     private function get_parent_children($parent_id) {
         global $wpdb;
         return $wpdb->get_results($wpdb->prepare("
             SELECT p.*
             FROM {$wpdb->posts} p
             INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
-            WHERE p.post_type = 'sms_students'
+            WHERE p.post_type = 'cpt_students'
             AND p.post_status = 'publish'
             AND pm.meta_key = 'parent_user_id'
             AND pm.meta_value = %d
@@ -629,8 +706,8 @@ class SMS_Dashboard_Manager extends SMS_Base {
             SELECT SUM(pm.meta_value)
             FROM {$wpdb->posts} p
             INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
-            WHERE p.post_type = 'sms_invoices'
-            AND pm.meta_key = 'invoice_student_id'
+            WHERE p.post_type = 'cpt_invoices'
+            AND pm.meta_key = 'student_id'
             AND pm.meta_value = %d
             AND NOT EXISTS (
                 SELECT 1 FROM {$wpdb->postmeta} pm2
@@ -648,7 +725,7 @@ class SMS_Dashboard_Manager extends SMS_Base {
             SELECT p.*, pm.meta_value as amount
             FROM {$wpdb->posts} p
             INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
-            WHERE p.post_type = 'sms_transactions'
+            WHERE p.post_type = 'cpt_transactions'
             AND pm.meta_key = 'transaction_student_id'
             AND pm.meta_value = %d
             ORDER BY p.post_date DESC
@@ -666,7 +743,7 @@ class SMS_Dashboard_Manager extends SMS_Base {
         return $wpdb->get_results($wpdb->prepare("
             SELECT p.*
             FROM {$wpdb->posts} p
-            WHERE p.post_type = 'sms_notices'
+            WHERE p.post_type = 'cpt_notices'
             AND p.post_status = 'publish'
             ORDER BY p.post_date DESC
             LIMIT %d

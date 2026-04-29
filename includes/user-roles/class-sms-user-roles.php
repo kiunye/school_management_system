@@ -219,10 +219,10 @@ class SMS_User_Roles extends SMS_Base {
      */
     public function get_role_display_name($role) {
         $role_names = array(
-            'school_administrator' => __('School Administrator', 'school-management-system'),
-            'teacher' => __('Teacher', 'school-management-system'),
-            'parent' => __('Parent', 'school-management-system'),
-            'student' => __('Student', 'school-management-system')
+            'sms_admin' => __('School Administrator', 'school-management-system'),
+            'sms_teacher' => __('Teacher', 'school-management-system'),
+            'sms_parent' => __('Parent', 'school-management-system'),
+            'sms_student' => __('Student', 'school-management-system')
         );
         
         return isset($role_names[$role]) ? $role_names[$role] : ucfirst($role);
@@ -241,7 +241,7 @@ class SMS_User_Roles extends SMS_Base {
             return false;
         }
         
-        $sms_roles = array('school_administrator', 'teacher', 'parent', 'student');
+        $sms_roles = array_keys(self::SMS_ROLES);
         $user_roles = $user->roles;
         
         return !empty(array_intersect($sms_roles, $user_roles));
@@ -314,7 +314,7 @@ class SMS_User_Roles extends SMS_Base {
         }
 
         // Default role assignment logic
-        $default_role = apply_filters('sms_default_user_role', 'parent', $user);
+        $default_role = apply_filters('sms_default_user_role', 'sms_parent', $user);
         
         if (in_array($default_role, array_keys(self::SMS_ROLES))) {
             $this->assign_user_role($user_id, $default_role);
@@ -348,7 +348,7 @@ class SMS_User_Roles extends SMS_Base {
         
         if ($this->user_has_sms_role($current_user->ID)) {
             // School administrators can manage all SMS roles
-            if (in_array('school_administrator', $current_user->roles)) {
+            if (in_array('sms_admin', $current_user->roles)) {
                 $sms_roles = [];
                 foreach (self::SMS_ROLES as $role_key => $role_name) {
                     if (isset($roles[$role_key])) {
@@ -359,8 +359,8 @@ class SMS_User_Roles extends SMS_Base {
             }
             
             // Teachers can only manage parent and student roles
-            if (in_array('teacher', $current_user->roles)) {
-                $allowed_roles = ['parent', 'student'];
+            if (in_array('sms_teacher', $current_user->roles)) {
+                $allowed_roles = ['sms_parent', 'sms_student'];
                 $filtered_roles = [];
                 foreach ($allowed_roles as $role_key) {
                     if (isset($roles[$role_key])) {
@@ -385,7 +385,7 @@ class SMS_User_Roles extends SMS_Base {
         }
 
         // Parents and students should not access admin area except for profile
-        if (in_array('parent', $current_user->roles) || in_array('student', $current_user->roles)) {
+        if (in_array('sms_parent', $current_user->roles) || in_array('sms_student', $current_user->roles)) {
             $allowed_pages = ['profile.php', 'user-edit.php', 'admin-ajax.php'];
             $current_page = basename($_SERVER['PHP_SELF']);
             
@@ -406,12 +406,12 @@ class SMS_User_Roles extends SMS_Base {
         
         // Role-specific meta
         switch ($role) {
-            case 'teacher':
+            case 'sms_teacher':
                 update_user_meta($user_id, 'sms_teacher_id', $this->generate_teacher_id());
                 update_user_meta($user_id, 'sms_assigned_classes', []);
                 break;
                 
-            case 'parent':
+            case 'sms_parent':
                 update_user_meta($user_id, 'sms_children', []);
                 update_user_meta($user_id, 'sms_notification_preferences', [
                     'sms' => true,
@@ -421,7 +421,7 @@ class SMS_User_Roles extends SMS_Base {
                 ]);
                 break;
                 
-            case 'student':
+            case 'sms_student':
                 update_user_meta($user_id, 'sms_student_status', 'pending');
                 break;
         }
@@ -436,7 +436,7 @@ class SMS_User_Roles extends SMS_Base {
         
         // Get the highest existing teacher ID for this year
         $users = get_users([
-            'role' => 'teacher',
+            'role' => 'sms_teacher',
             'meta_key' => 'sms_teacher_id',
             'meta_compare' => 'LIKE',
             'meta_value' => $prefix
@@ -571,5 +571,3 @@ class SMS_User_Roles extends SMS_Base {
         return $stats;
     }
 }
-// Initialize the class
-new SMS_User_Roles();

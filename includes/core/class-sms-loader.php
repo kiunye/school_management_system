@@ -78,6 +78,9 @@ class SMS_Loader {
         require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-security.php';
         require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-logger.php';
         require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-database-setup.php';
+        require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-data-migrator.php';
+        require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-data-validator.php';
+        require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-backup-manager.php';
         require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-communication-handler.php';
         
         // Financial management and payment gateways (load in dependency order)
@@ -106,6 +109,7 @@ class SMS_Loader {
         require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-admin.php';
         require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-dashboard-manager.php';
         require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-dashboard-redirects.php';
+        require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-help-system.php';
         require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-role-tester.php';
         require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-student-admission-form.php';
         require_once SMS_PLUGIN_DIR . 'includes/admin/class-sms-attendance-manager.php';
@@ -243,6 +247,11 @@ class SMS_Loader {
         // Initialize dashboard redirects
         if (class_exists('SMS_Dashboard_Redirects')) {
             new SMS_Dashboard_Redirects();
+        }
+
+        // Initialize help system
+        if (class_exists('SMS_Help_System')) {
+            new SMS_Help_System();
         }
         
         // Initialize user roles

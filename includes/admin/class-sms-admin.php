@@ -227,6 +227,15 @@ class SMS_Admin extends SMS_Base {
             array($this, 'display_settings_page')
         );
 
+        // Data Migration submenu
+        add_submenu_page(
+            'school-management',
+            __('Data Migration', 'school-management-system'),
+            __('Data Migration', 'school-management-system'),
+            'manage_system_settings',
+            'sms-data-migration',
+            array($this, 'display_data_migration_page')
+        );
         // Role Tester submenu (for administrators only)
         if (current_user_can('manage_options') && class_exists('SMS_Role_Tester')) {
             add_submenu_page(
@@ -249,6 +258,10 @@ class SMS_Admin extends SMS_Base {
         
         // Add admin notices
         add_action('admin_notices', array($this, 'display_admin_notices'));
+
+        // Backup actions for data migration page
+        add_action('wp_ajax_sms_restore_backup', array($this, 'handle_restore_backup_ajax'));
+        add_action('wp_ajax_sms_delete_backup', array($this, 'handle_delete_backup_ajax'));
     }
 
     /**
@@ -398,6 +411,17 @@ class SMS_Admin extends SMS_Base {
     }
 
     /**
+     * Display data migration page.
+     */
+    public function display_data_migration_page() {
+        if (!$this->check_capability('manage_system_settings') && !current_user_can('manage_options')) {
+            wp_die(__('You do not have sufficient permissions to access this page.'));
+        }
+
+        include SMS_PLUGIN_DIR . 'admin/partials/data-migration.php';
+    }
+
+    /**
      * Display role tester page.
      */
     public function display_role_tester_page() {
@@ -454,5 +478,63 @@ class SMS_Admin extends SMS_Base {
             ) . '</p>';
             echo '</div>';
         }
+    }
+
+    /**
+     * Restore backup via AJAX.
+     */
+    public function handle_restore_backup_ajax() {
+        check_ajax_referer('sms_restore_backup', 'nonce');
+
+        if (!$this->check_capability('manage_system_settings') && !current_user_can('manage_options')) {
+            wp_send_json_error(__('Insufficient permissions.', 'school-management-system'));
+        }
+
+        $backup_id = sanitize_text_field(wp_unslash($_POST['backup_id'] ?? ''));
+        if ($backup_id === '') {
+            wp_send_json_error(__('Backup ID is required.', 'school-management-system'));
+        }
+
+        if (!class_exists('SMS_Backup_Manager')) {
+            wp_send_json_error(__('Backup manager is not available.', 'school-management-system'));
+        }
+
+        $backup_manager = new SMS_Backup_Manager();
+        $result = $backup_manager->restore_from_backup($backup_id);
+
+        if (is_wp_error($result)) {
+            wp_send_json_error($result->get_error_message());
+        }
+
+        wp_send_json_success(__('Backup restored successfully.', 'school-management-system'));
+    }
+
+    /**
+     * Delete backup via AJAX.
+     */
+    public function handle_delete_backup_ajax() {
+        check_ajax_referer('sms_delete_backup', 'nonce');
+
+        if (!$this->check_capability('manage_system_settings') && !current_user_can('manage_options')) {
+            wp_send_json_error(__('Insufficient permissions.', 'school-management-system'));
+        }
+
+        $backup_id = sanitize_text_field(wp_unslash($_POST['backup_id'] ?? ''));
+        if ($backup_id === '') {
+            wp_send_json_error(__('Backup ID is required.', 'school-management-system'));
+        }
+
+        if (!class_exists('SMS_Backup_Manager')) {
+            wp_send_json_error(__('Backup manager is not available.', 'school-management-system'));
+        }
+
+        $backup_manager = new SMS_Backup_Manager();
+        $result = $backup_manager->delete_backup($backup_id);
+
+        if (is_wp_error($result)) {
+            wp_send_json_error($result->get_error_message());
+        }
+
+        wp_send_json_success(__('Backup deleted successfully.', 'school-management-system'));
     }
 }

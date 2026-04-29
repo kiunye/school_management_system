@@ -54,6 +54,14 @@ class SMS_Activator {
             $db_setup->create_tables();
         }
 
+        // Load database setup class
+        require_once SMS_PLUGIN_DIR . 'includes/core/class-sms-database-setup.php';
+        
+        if (class_exists('SMS_Database_Setup')) {
+            $db_setup = new SMS_Database_Setup();
+            $db_setup->create_tables();
+        }
+
         $charset_collate = $wpdb->get_charset_collate();
 
         // Activity log table
@@ -126,8 +134,8 @@ class SMS_Activator {
      * Create custom user roles and capabilities.
      */
     private static function create_user_roles() {
-        // School Administrator role
-        add_role('school_administrator', 'School Administrator', array(
+        // SMS Administrator role
+        add_role('sms_admin', 'School Administrator', array(
             'read' => true,
             'manage_students' => true,
             'manage_classes' => true,
@@ -146,7 +154,7 @@ class SMS_Activator {
         ));
 
         // Teacher role
-        add_role('teacher', 'Teacher', array(
+        add_role('sms_teacher', 'Teacher', array(
             'read' => true,
             'edit_assigned_classes' => true,
             'mark_attendance' => true,
@@ -159,7 +167,7 @@ class SMS_Activator {
         ));
 
         // Parent role
-        add_role('parent', 'Parent', array(
+        add_role('sms_parent', 'Parent', array(
             'read' => true,
             'view_child_records' => true,
             'view_child_fees' => true,
@@ -170,7 +178,7 @@ class SMS_Activator {
         ));
 
         // Student role
-        add_role('student', 'Student', array(
+        add_role('sms_student', 'Student', array(
             'read' => true,
             'view_own_records' => true,
             'view_timetable' => true,
